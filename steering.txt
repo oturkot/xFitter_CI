@@ -384,3 +384,18 @@
   ! NREMOVEPRIORS = 0                  ! Remove prior from the last n PDF nuisance parameters
   ! DataToTheo = True                  ! reset data to predictions corresponding to member 0, for sensitivity studies
 &End
+
+&CIstudy
+  ! Whether to do the Contact Interaction analysis:
+  doCI = true
+
+  ! Type of the analysis:
+  CItype = 'VV'
+
+  ! CI variable value and step
+  CIvarval  = 0.0 !4.5E-06
+  CIvarstep = 1.0E-06
+
+  CIDoSimpFit = true
+  CISimpFitStep = 'SimpFit'
+&End
