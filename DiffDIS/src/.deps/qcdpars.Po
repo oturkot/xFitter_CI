@@ -1,0 +1,5 @@
+qcdpars.o: qcdpars.cc ../include/qcdpars.h ../include/types.h
+
+../include/qcdpars.h:
+
+../include/types.h:
