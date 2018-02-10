@@ -457,6 +457,11 @@ C
       call CalcReducedXsectionForXYQ2(X,Y,Q2,NDATAPOINTS(IDataSet),
      $     charge,polarity,IDataSet,XSecType, local_hfscheme,XSec)
 
+      call ModImpose(eta)
+      eta3 = reshape([eta(1,1)-eta(1,2),
+     $                eta(1,3)-eta(1,4),
+     $                eta(1,5)-eta(1,6)],
+     $                [3])
 
       do i=1,NDATAPOINTS(IDataSet)
          idx =  DATASETIDX(IDataSet,i)
@@ -522,7 +527,7 @@ c diff.dis=0 important for CCDIS
                   endif
 
                   if((xsec_LO_SM_CI.GT.0.).AND.(xsec_LO_SM.GT.0.))then 
-                     THEO(idx) = THEO(idx)*(xsec_LO_SM_CI/xsec_LO_SM)      
+                     THEO(idx) = THEO(idx)*(xsec_LO_SM_CI/xsec_LO_SM)
                   endif
 
                elseif (CIindex.eq.401) then
