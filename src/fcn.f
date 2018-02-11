@@ -96,7 +96,15 @@ C Print MINUIT extra parameters
 !         print '(''HiTwist:'',6F10.4)',XParValueByName('HT_x0'), XParValueByName('HT_sig0'), XParValueByName('HT_lambda') 
 !       endif
 ! ---]
+
+      if(doCI) then
+        CIvarval = parminuit(idxCIval)
+        print *,'CI minuit readout test, CIvarval = ',CIvarval
+C        print *,'in minuit CI index = ',idxCIval
+C        print *,'in minuit CI parameter = ',parminuit(idxCIval)
+      endif
       
+C   LW: end of CI minuit readout
 *
 * Evaluate the chi2:
 *     
@@ -235,13 +243,6 @@ C--------------------------------------------------------------
       enddo
 
 
-      do i=1,ntot
-         THEO(i) = 0.d0
-         THEO_MOD(i) = 0.d0
-      enddo
-
-
-
       if (Itheory.eq.3) then
         Itheory = 0
       endif
@@ -250,6 +251,11 @@ C--------------------------------------------------------------
       ! chi^2 calculation.
       if(CIDoSimpFit.and.iflag.ne.1.and.TRIM(CIsimpFitStep).eq."SimpFit")
      $  goto 99 
+
+      do i=1,ntot
+         THEO(i) = 0.d0
+         THEO_MOD(i) = 0.d0
+      enddo
 
       if(Itheory.ge.100) then
         auh(1) = parminuitsave(1)
@@ -390,6 +396,7 @@ c             call fillvfngrid
 
    99 continue
 
+
 *     ---------------------------------------------------------  	 
 *     Start of loop over data points: 	 
 *     ---------------------------------------------------------
@@ -397,15 +404,14 @@ c             call fillvfngrid
       do 100 i=1,npoints
          
          h1iset = JSET(i)
-         
          if (iflag.eq.3) npts(h1iset) = npts(h1iset) + 1
          
          n0 = n0 + 1
          ndf = ndf + 1
 
-         
-         
- 100  continue
+ 100     continue
+
+
 *     ---------------------------------------------------------
 *     end of data loop
 *     ---------------------------------------------------------
@@ -444,8 +450,7 @@ c             call fillvfngrid
       if (doOffset .and. iflag.eq.3) then
         Chi2OffsRecalc = .true.
         Chi2OffsFinal = .true.
-        call GetNewChisquare(iflag,n0,OffsDchi2,rsys,ersys,
-     $       pchi2offs,fcorchi2) 
+        call GetNewChisquare(iflag,n0,OffsDchi2,rsys,ersys,pchi2offs,fcorchi2) 
       else
         Chi2OffsRecalc = .false.
       endif
