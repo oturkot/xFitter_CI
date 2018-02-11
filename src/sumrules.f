@@ -203,7 +203,8 @@ cVR      print*,'........................................tphoton', tPho
          print '(''Ub:'',11F10.4)',(parubar(i),i=1,10)
          print '(''Db:'',11F10.4)',(pardbar(i),i=1,10)
          print '(''GL:'',11F10.4)',(parglue(i),i=1,10)
-         print '(''ST:'',11F10.4)',(parstr(i),i=1,10)
+         !print '(''ST:'',11F10.4)',(parstr(i),i=1,10)
+         print '(''CI:'',F10.4)', CIvarval
          if (iTheory.eq.11.or.iTheory.eq.35) then
             print '(''PH:'',11F10.4)',(parphoton(i),i=1,10)
          endif

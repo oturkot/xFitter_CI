@@ -97,14 +97,9 @@ C Print MINUIT extra parameters
 !       endif
 ! ---]
 
-      if(doCI) then
-        CIvarval = parminuit(idxCIval)
-        print *,'CI minuit readout test, CIvarval = ',CIvarval
-C        print *,'in minuit CI index = ',idxCIval
-C        print *,'in minuit CI parameter = ',parminuit(idxCIval)
-      endif
-      
-C   LW: end of CI minuit readout
+
+      if(doCI) CIvarval = parminuit(idxCIval)
+
 *
 * Evaluate the chi2:
 *     
