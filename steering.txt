@@ -15,7 +15,6 @@
     InputFileNames(6) = 'datafiles/hera/h1zeusCombined/inclusiveDis/1506.06042/HERA1+2_CCep.dat'
     InputFileNames(7) = 'datafiles/hera/h1zeusCombined/inclusiveDis/1506.06042/HERA1+2_CCem.dat'
 
-
 &End
 
 &InCorr
@@ -99,7 +98,7 @@
                                 !uPDF4 fit calculating kernel on fly, grid of sigma_hat
 
 
-  Order  = 'NNLO'       ! 'LO', 'NLO' or 'NNLO', used for DGLAP evolution.
+  Order  = 'NLO'       ! 'LO', 'NLO' or 'NNLO', used for DGLAP evolution.
 
   Q02     = 1.9 ! Evolution starting scale
 
@@ -208,8 +207,8 @@
   DoBandsSym = False     ! symmetric bands ( HESSE )
 
   ! -- Q2 values at which the pdfs & errors are done (up to 20)
-  Q2VAL = 1.9, 3.0, 4.0, 5., 10., 100., 6464, 8317 
-!  Q2VAL = 1.9, 4., 10., 100., 6464, 8317 
+!  Q2VAL = 1.9, 3.0, 4.0, 5., 10., 100., 6464, 8317 
+  Q2VAL = 1.9, 4., 10., 100., 6464, 8317 
 
   ! How many x points to write (standard = 101)
   OUTNX = 101
@@ -305,13 +304,13 @@
 *
 &MCErrors
   ! Activate MC method for error estimation if lRand = True
-  lRAND   = False
+  lRAND   = True
   
   ! Use data (true, default) or theory (false) for the central values of the MC replica
-  lRANDDATA = True
+  lRANDDATA = False
 
   ! MC method Seed
-  ISeedMC = 123456 
+  ISeedMC = 1100000001 
 
   ! --- Choose what distribution for the random number generator 
   ! STATYPE (SYS_TYPE)  =   1  gauss
@@ -373,7 +372,8 @@
 * (Optional) LHAPDF sttering card
 *
 &lhapdf
-  LHAPDFSET  = 'CT10nlo'               ! LHAPDF grid file 
+  LHAPDFSET  = 'cteq66.LHgrid' !'CT10nlo'               ! LHAPDF grid file 
+  LHAPDFErrors = False
   ILHAPDFSET = 0                       ! Set a PDF member of the PDF set (use together with LHAPDFPROFILE = False)
   ! LHAPDFVARSET = 'HERAPDF20_NLO_VAR' ! Add a PDF set with model and parametrisation uncertainties
   ! NPARVAR = 3                        ! Number of parametrisation uncertainties in the LHAPDFVARSET set
@@ -392,10 +392,13 @@
   ! Type of the analysis:
   CItype = 'VV'
 
+  ! Enable/disable running alpha EM
+  !CIrunning_alphaem = False
+
   ! CI variable value and step
   CIvarval  = 0.0 !4.5E-06
-  CIvarstep = 1.0E-06
+  CIvarstep = 5.0E-08
 
-  CIDoSimpFit = true
-  CISimpFitStep = 'SimpFit'
+  CIDoSimpFit = TRUE
+  CISimpFitStep = "SimpFit"
 &End
