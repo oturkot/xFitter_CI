@@ -369,7 +369,8 @@ C---------------------------------------------------------------
       integer IDataSet, local_hfscheme
       integer idxQ2, idxX, idxY, i,  idx, idxS
       
-      double precision X(NPMaxDIS),Y(NPMaxDIS),Q2(NPMaxDIS),XSec(NPMaxDIS)
+      double precision X(NPMaxDIS),Y(NPMaxDIS),Q2(NPMaxDIS),
+     >                 XSec(NPMaxDIS)
       double precision Charge, polarity, alphaem_run, factor, S, YPlus
       logical IsReduced
 
@@ -386,15 +387,16 @@ c H1qcdfunc
       data ifirst /1/
 
 C-------CI_models variables
-      DOUBLE PRECISION xsec_LO_SM_CI, xsec_LO_SM
+      DOUBLE PRECISION               :: xsec_LO_SM_CI, xsec_LO_SM
       DOUBLE PRECISION, DIMENSION(3) :: Eta3
-      DOUBLE PRECISION XQfract(2,7)
-      LOGICAL Electron
-      double precision dbPdf
-      dimension dbPdf(-6:6)
-      integer status
-      integer iq 
-      DOUBLE PRECISION SS      
+      DOUBLE PRECISION               :: XQfract(2,7)
+      logical                        :: Electron
+      double precision               :: dbPdf
+      dimension                      :: dbPdf(-6:6)
+      integer                        :: status
+      integer                        :: iq 
+      double precision               :: SS
+      double precision               :: ContAlph ! function
 
 C---------------------------------------------------------
       if(debug) then
@@ -413,7 +415,8 @@ C
       idxQ2 = GetBinIndex(IDataSet,'Q2')
       idxX  = GetBinIndex(IDataSet,'x')
       idxY = GetBinIndex(IDataSet,'y')
-      IsReduced = DATASETInfo( GetInfoIndex(IDataSet,'reduced'), IDataSet).gt.0
+      IsReduced = DATASETInfo(GetInfoIndex(IDataSet,'reduced'),
+     >                        IDataSet) .gt. 0
 
 
 
@@ -465,6 +468,18 @@ C
 
       do i=1,NDATAPOINTS(IDataSet)
          idx =  DATASETIDX(IDataSet,i)
+
+         ! running alpha_EM
+         if (CIrunning_alphaem) then
+            select case (CIalphaemrun_func)
+               case ('aemrun')
+                  alphaem = aemrun(Q2(i))
+               case ('ContAlph')
+                  alphaem = ContAlph(Q2(i))
+               case default
+                  stop 'unknown running alpha em function'
+            end select
+         end if
 
          Yplus  = 1. + (1.-Y(i))**2
 
