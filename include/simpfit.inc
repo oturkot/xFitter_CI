@@ -11,3 +11,6 @@
      $                    , theta_p, theta_m
      $                    , p0
 
+	  	logical :: is_sfdinit
+		common/CIsfstate/ is_sfdinit
+

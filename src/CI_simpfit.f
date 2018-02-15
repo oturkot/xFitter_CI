@@ -315,7 +315,14 @@ c    external functions and subroutines
       integer nvarl(200), NIOFEX(200), neofix(50)
       common/MN7INX/ nvarl, NIOFEX, neofix
 c     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
-      print '('' --- simpfcn...'')'
+      
+      if (.not. is_sfdinit) then
+         write (*, '(''READING SIMPFIT DATA... '')', advance='NO')
+         call CI_read_derivatives
+         print*, "DONE"
+         is_sfdinit = .true.
+      end if
+
 
       THEO = THEO*0.
       do i = 1, NTOT
@@ -372,9 +379,6 @@ C
       integer :: II, i_dat, idx, i, i_par, npars, prespars(mne)
 
       external :: hf_stop
-
-      print '('' - - - - - - - - - - reading derivatives... '//
-     $         ' - - - - - - - - - - '')'
 
       call derivs_to_zero
 *     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --

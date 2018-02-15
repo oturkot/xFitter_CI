@@ -1918,6 +1918,8 @@ C<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
       implicit none
       include 'steering.inc'
 
+     	logical :: is_sfdinit
+      common/CIsfstate/ is_sfdinit
 C---------------------------------------------
 C CI namelist
       namelist/CIstudy/ doCI, CItype, CIvarval, CIvarstep,
@@ -1933,6 +1935,7 @@ C  Read the CI namelist:
       if(CIdoSimpFit) then
          if(TRIM(CIsimpFitStep) .eq. 'CalcDerivatives') then
          else if(TRIM(CIsimpFitStep) .eq. 'SimpFit') then
+            is_sfdinit = .false.
          else
             print *, "Error: not supported CISimpFitStep value: ", 
      $                TRIM(CIsimpFitStep)

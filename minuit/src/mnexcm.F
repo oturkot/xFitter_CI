@@ -192,9 +192,6 @@ C                     - - - simpfit block - - -
             CALL CI_CALC_DERIVATIVES
             ! and exit
             GOTO 5000
-         ELSEIF(TRIM(CISIMPFITSTEP) .eq. 'SimpFit') THEN
-            ! read data for simpfit
-            CALL CI_READ_DERIVATIVES
          ENDIF
       ENDIF
 C                              - - -
