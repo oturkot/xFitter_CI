@@ -227,6 +227,5 @@ C     Namelist for the CI analyses
       double precision CIvarval, CIvarstep, CIvarmin, CIvarmax
       common/CIvars/CIindex,idxCIval,CItype,CIname,
      $    CIvarval,CIvarstep,CIvarmin,CIvarmax,doCI,
-     $    CIDoSimpFit, CISimpFitStep, CIrunning_alphaem,
-	   $    CIalphaemrun_func
+     $    CIDoSimpFit, CISimpFitStep, CIrunning_alphaem, CIalphaemrun_func
 c<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
