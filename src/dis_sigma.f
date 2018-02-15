@@ -521,7 +521,7 @@ c diff.dis=0 important for CCDIS
      +                  Status )
                   endif
               
-                  if(XSecType.eq.'СCDIS')then
+                  if(XSecType.eq.'CCDIS')then
                      call DContCC(x(i),q2(i),SS,Eta3,Electron,polarity,
      +                  XQfract, xsec_LO_SM, xsec_LO_SM_CI, Status ) 
                   endif
