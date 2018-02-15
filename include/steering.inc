@@ -222,10 +222,11 @@ C     11/06/2014 LW
 C     Namelist for the CI analyses
 
       logical doCI, CIDoSimpFit, CIrunning_alphaem
-      character*32 CItype, CIname, CISimpFitStep
+      character*32 CItype, CIname, CISimpFitStep, CIalphaemrun_func
       integer CIindex, idxCIval
       double precision CIvarval, CIvarstep, CIvarmin, CIvarmax
       common/CIvars/CIindex,idxCIval,CItype,CIname,
      $    CIvarval,CIvarstep,CIvarmin,CIvarmax,doCI,
-     $    CIDoSimpFit, CISimpFitStep, CIrunning_alphaem
+     $    CIDoSimpFit, CISimpFitStep, CIrunning_alphaem,
+	  $    CIalphaemrun_func
 c<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>

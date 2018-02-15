@@ -470,7 +470,16 @@ C
          idx =  DATASETIDX(IDataSet,i)
 
          ! running alpha_EM
-         if (CIrunning_alphaem) alphaem = ContAlph(Q2(i))
+         if (CIrunning_alphaem) then
+            select case (CIalphaemrun_func)
+               case ('aemrun')
+                  alphaem = aemrun(Q2(i))
+               case ('ContAlph')
+                  alphaem = ContAlph(Q2(i))
+               case default
+                  stop 'unknown running alpha em function'
+            end select
+         end if
 
          Yplus  = 1. + (1.-Y(i))**2
 
