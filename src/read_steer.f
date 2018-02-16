@@ -1920,7 +1920,10 @@ C<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
 
      	logical :: is_sfdinit
       common/CIsfstate/ is_sfdinit
+
+      external :: eprc_init
 C---------------------------------------------
+C
 C CI namelist
       namelist/CIstudy/ doCI, CItype, CIvarval, CIvarstep,
      &                  CIrunning_alphaem, CIDoSimpFit, CISimpFitStep,
@@ -1932,7 +1935,11 @@ C  Read the CI namelist:
  131  continue
       close (51)
 
-      if(CIdoSimpFit) then
+      if (CIalphaemrun_func .eq. 'aemrun' .and. ewfit .le. 0)
+     >   call eprc_init(.true.)
+
+
+      if (CIdoSimpFit) then
          if(TRIM(CIsimpFitStep) .eq. 'CalcDerivatives') then
          else if(TRIM(CIsimpFitStep) .eq. 'SimpFit') then
             is_sfdinit = .false.

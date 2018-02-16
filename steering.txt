@@ -173,8 +173,8 @@
  !  'ExtraSystRescale'      : additional re-scaling of stat. uncertainty to account for syst. shifts.
 
    CHI2SettingsName = 'StatScale', 'UncorSysScale', 'CorSysScale', 'UncorChi2Type', 'CorChi2Type'
-   Chi2Settings     = 'Poisson'  , 'Linear',        'Linear'     , 'Diagonal'     , 'Hessian'
-   Chi2ExtraParam = 'PoissonCorr'
+	 Chi2Settings     = 'NoRescale'  , 'NoRescale',        'Linear'     , 'Diagonal'     , 'Hessian'
+   ! Chi2ExtraParam = 'PoissonCorr'
 
  ! Flag to define if native APPLgrid CKM values should be kept.
  LUseAPPLgridCKM = True
@@ -304,7 +304,7 @@
 *
 &MCErrors
   ! Activate MC method for error estimation if lRand = True
-  lRAND   = True
+  lRAND   = .false.
   
   ! Use data (true, default) or theory (false) for the central values of the MC replica
   lRANDDATA = False
@@ -394,12 +394,15 @@
 
   ! Enable/disable running alpha EM
   CIrunning_alphaem = False
+
+	! 'ContAlph' : use function from "src/CI_models.f"
+	! 'aemrun'   :              from "EW/src/formff.f"
 	CIalphaemrun_func = 'aemrun'
 
   ! CI variable value and step
 	CIvarval  = 0.0 !4.5E-06
 	CIvarstep = 5.0E-08
 
-  CIDoSimpFit = TRUE
+  CIDoSimpFit = .false.
   CISimpFitStep = "SimpFit"
 &End

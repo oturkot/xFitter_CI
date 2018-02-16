@@ -304,15 +304,18 @@ C~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       double precision, intent(out) :: chi2out
 
 c    counters      
-      integer i, i_par, i_dat, idx
+      integer :: i, i_par, i_dat, idx
+
+c    sum rules flag
+      integer :: kflag
 
 c    external functions and subroutines
-      double precision chi2data_theory
+      double precision :: chi2data_theory
 
-      double precision WERR(50), ern(50), erp(50), globc(50)
+      double precision :: WERR(50), ern(50), erp(50), globc(50)
       common/MN7ERR/ erp, ern, WERR, globc
 
-      integer nvarl(200), NIOFEX(200), neofix(50)
+      integer :: nvarl(200), NIOFEX(200), neofix(50)
       common/MN7INX/ nvarl, NIOFEX, neofix
 c     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
       
@@ -322,6 +325,16 @@ c     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
          print*, "DONE"
          is_sfdinit = .true.
       end if
+      
+
+      kflag=0
+      if (Itheory.eq.0.or.Itheory.eq.10.or.itheory.eq.11.or.itheory.eq.35)
+     >   call SumRules(kflag)
+
+      if (kflag.eq.1) then
+         write(6,*) ' --- problem in SumRules, kflag = 1'
+         call HF_errlog(12020516,'F: problem in SumRules, kflag = 1')
+      endif
 
 
       THEO = THEO*0.
