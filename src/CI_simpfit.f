@@ -1,3 +1,33 @@
+      subroutine LOGO(opt)
+      integer, intent(in) :: opt
+      character :: c = char(27)
+      print *, ""
+      print *, ""
+      write(*,'(''                     '//c//'[38;5;238;1m         /WMGOb   1100  $&     *!  //==-=-\   '//c//'[0m'')')
+      write(*,'(''                     '//c//'[38;5;240;1m        SFp   KJ   11   #%&   /(|  |/    \\|  '//c//'[0m'')')
+      write(*,'(''                     '//c//'[38;5;242;1m        |x___      10   $;+@ /,#&  |\_ _ /|/  '//c//'[0m'')')
+      write(*,'(''                     '//c//'[38;5;244;1m         VWCItb    01   #% \$/ !=  |==----/   '//c//'[0m'')')
+      write(*,'(''                     '//c//'[38;5;246;1m             qU|   10   ?-     -|  ||-        '//c//'[0m'')')
+      write(*,'(''                     '//c//'[38;5;248;1m        YTb  dOY   01   $@     |:  ||-        '//c//'[0m'')')
+      write(*,'(''                     '//c//'[38;5;250;1m         VRGBSF   1011  =.     #$  ||/        '//c//'[0m'')')
+      write(*, '(''                                _ _ _     _  _ _   __ __ _  '')')
+      write(*, '(''                                  _____/  \ |'//c//'[38;5;123;1m:'//c//'[0m| /  \__  __  '')')
+      write(*, '(''                                  |         |'//c//'[38;5;123;1m:'//c//'[0m|       |     '')')
+      write(*, '(''                                   _ __     |'//c//'[38;5;123;1m:'//c//'[0m|       |     '')')
+      write(*, '(''                                   ___/     |'//c//'[38;5;123;1m:'//c//'[0m|       |     '')')
+      write(*, '(''                                  |         |'//c//'[38;5;123;1m:'//c//'[0m|       |     '')')
+      write(*, '(''                                            |'//c//'[38;5;123;1m:'//c//'[0m|       |     '')')
+      write(*, '(''                                __|       /_|'//c//'[38;5;123;1m:'//c//'[0m|_\     |_    '')')
+      print *, ""
+      if (opt .eq. 1) then
+      write(*, '(''                                        '//c//'[38;5;231;1;4mDerivatives'//c//'[0m '')')
+      else
+      write(*, '(''                                          '//c//'[38;5;231;1;4mThe Fit'//c//'[0m '')')
+      end if
+      print *, ""
+      end subroutine LOGO
+
+
 C~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      
       subroutine calc_theo(g_dummy, parminuit, iflag)
       implicit none
@@ -132,6 +162,8 @@ c    external functions and subroutines
       integer nvarl(200), NIOFEX(200), neofix(50)
       common/MN7INX/ nvarl, NIOFEX, neofix
 
+
+      call LOGO(1)
 *     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
       RqTrue = parminuit(idxCIval)
       Rqerr  = WERR(NIOFEX(idxCIval))
@@ -324,6 +356,7 @@ c     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
          call CI_read_derivatives
          print*, "DONE"
          is_sfdinit = .true.
+         call LOGO(0)
       end if
       
 
