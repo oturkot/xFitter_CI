@@ -1918,9 +1918,6 @@ C<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
       implicit none
       include 'steering.inc'
 
-     	logical :: is_sfdinit
-      common/CIsfstate/ is_sfdinit
-
       external :: eprc_init
 C---------------------------------------------
 C
@@ -1942,9 +1939,8 @@ C  Read the CI namelist:
       if (CIdoSimpFit) then
          if(TRIM(CIsimpFitStep) .eq. 'CalcDerivatives') then
          else if(TRIM(CIsimpFitStep) .eq. 'SimpFit') then
-            is_sfdinit = .false.
          else
-            print *, "Error: not supported CISimpFitStep value: ", 
+            print *, "Error: not supported CISimpFitStep value: "//
      $                TRIM(CIsimpFitStep)
             call HF_stop
          endif

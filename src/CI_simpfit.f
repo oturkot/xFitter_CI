@@ -178,6 +178,7 @@ c    external functions and subroutines
       call calc_theo(g_dummy, parminuit, 4)
       m0 = THEO
 
+!$OMP DO
       do i_par = 1, mne
          if(NIOFEX(i_par) .eq. 0) cycle
          if(WERR(NIOFEX(i_par)) .eq. 0D0) cycle
@@ -271,6 +272,7 @@ c               . . . . . . . . . . . . . . . . . . . . . .
          parminuit(i_par) = Parbuffer
          parminuit(idxCIval) = RqTrue
       end do
+!$OMP END DO
 *     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
 
       if(doCI) then
@@ -337,6 +339,10 @@ C~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 c    counters      
       integer :: i, i_par, i_dat, idx
+c    local static variable
+      logical :: is_sfdinit
+      DATA is_sfdinit /.False./
+      SAVE is_sfdinit
 
 c    sum rules flag
       integer :: kflag
@@ -344,9 +350,9 @@ c    sum rules flag
 c    external functions and subroutines
       double precision :: chi2data_theory
 
+c    global varibales
       double precision :: WERR(50), ern(50), erp(50), globc(50)
       common/MN7ERR/ erp, ern, WERR, globc
-
       integer :: nvarl(200), NIOFEX(200), neofix(50)
       common/MN7INX/ nvarl, NIOFEX, neofix
 c     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
@@ -370,10 +376,7 @@ c     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
       endif
 
 
-      THEO = THEO*0.
-      do i = 1, NTOT
-         THEO(i) = m0(i)
-      end do
+      THEO = m0
 
       do i_par = 1, mne
          if(NIOFEX(i_par) .eq. 0) cycle
