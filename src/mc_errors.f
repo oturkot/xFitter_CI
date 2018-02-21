@@ -90,7 +90,7 @@ C Store relative alpha:
             s = THEO(n0)
          endif
          sorig = s
-         syssh = 1
+         syssh = 1D0
 
          do isys=1,nsys
 
@@ -104,9 +104,9 @@ C ! Introduce asymmetric errors, for Gaussian case only:
                   syssh = syssh + beta(isys, n0) * rand_shift(isys)
                else
                   if ( rand_shift(isys).gt. 0) then
-                     s = s*(1.+ BetaAsym(isys,1,n0) * rand_shift(isys))
+                     syssh = syssh + BetaAsym(isys,1,n0) * rand_shift(isys)
                   else
-                     s = s*(1.+ BetaAsym(isys,2,n0) * rand_shift(isys))
+                     syssh = syssh + BetaAsym(isys,2,n0) * rand_shift(isys)
                   endif
                endif
                
@@ -136,10 +136,10 @@ CV now choose sta (advised gauss OR poisson)
             !s = s + rndsh * alpha(n0)
             s = (s + rndsh * alpha(n0)) * syssh
 
-c            if (alpha(n0).eq.0) then
-c               s = 0.1
-c               alpha(n0) = 1.e6
-c            endif
+            if (alpha(n0).eq.0) then
+               s = 0.1
+               alpha(n0) = 1.e6
+            endif
          elseif (statype.eq.3.) then ! lognormal
             lsig = alpha(n0)
             lmu=1.

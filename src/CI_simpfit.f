@@ -178,7 +178,6 @@ c    external functions and subroutines
       call calc_theo(g_dummy, parminuit, 4)
       m0 = THEO
 
-!$OMP DO
       do i_par = 1, mne
          if(NIOFEX(i_par) .eq. 0) cycle
          if(WERR(NIOFEX(i_par)) .eq. 0D0) cycle
@@ -272,7 +271,6 @@ c               . . . . . . . . . . . . . . . . . . . . . .
          parminuit(i_par) = Parbuffer
          parminuit(idxCIval) = RqTrue
       end do
-!$OMP END DO
 *     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
 
       if(doCI) then
