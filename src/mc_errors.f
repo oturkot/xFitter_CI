@@ -89,7 +89,7 @@ C Store relative alpha:
          else
             s = THEO(n0)
          endif
-         sorig = s
+         sorig = DATEN(n0)
          syssh = 1D0
 
          do isys=1,nsys
@@ -101,7 +101,7 @@ cv  first for systematic uncert, then for stat.
 C ! Introduce asymmetric errors, for Gaussian case only:
                if ( .not. LAsymSyst(isys) ) then
                   !s = s*(1.+ beta(isys,n0) * rand_shift(isys))
-                  syssh = syssh + beta(isys, n0) * rand_shift(isys)
+                  syssh = syssh + beta(isys,n0) * rand_shift(isys)
                else
                   if ( rand_shift(isys).gt. 0) then
                      syssh = syssh + BetaAsym(isys,1,n0) * rand_shift(isys)
@@ -125,7 +125,7 @@ c     $                 s,logshift(lmu,lsig,lrunif)
                endif
             endif               ! endif (sys for systematic shifts)
          enddo                  ! end loop over the systematic shifts
-            
+               
          voica=s                ! save cross section before the stat shift
 
 CV now choose sta (advised gauss OR poisson)  
@@ -134,7 +134,7 @@ CV now choose sta (advised gauss OR poisson)
 
             alpha(n0) = sorig * alpha_rel ! adjust alpha0, important for theory-like data. 
             !s = s + rndsh * alpha(n0)
-            s = (s + rndsh * alpha(n0)) * syssh
+            s = (s + rndsh * alpha(n0))*syssh
 
             if (alpha(n0).eq.0) then
                s = 0.1
@@ -217,7 +217,6 @@ C Store uncor in %:
             e_tot(n0) = sqrt(euncor_out**2+estat_out**2+ecor_in**2)
      $           /s*100.0
          endif
-         
  
          print 
      $ '(''Original, systematics and stat. shifted data:'',i4,5E12.4)'
