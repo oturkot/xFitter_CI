@@ -407,6 +407,7 @@ C 7/10/16 Reset top threshold if beyond kinematic limit:
          call setcbt(3,iqc,iqb,iqt) !thesholds in the ffns
          print *,'Fixed Flavour Number Scheme set with nf=3'
       else
+*     despite the comment this is vfns (according to qcdnum170114 manual)
         call setcbt(0,iqc,iqb,iqt) !thesholds in the ffns
       endif
 

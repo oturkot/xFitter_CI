@@ -43,6 +43,8 @@ C For log normal random shifts:
 
       double precision alpha_rel ! original relative alpha (uncertainty)
 
+      double precision syssh
+
 C functions:
       real logshift
       double precision alnorm     
@@ -88,6 +90,7 @@ C Store relative alpha:
             s = THEO(n0)
          endif
          sorig = s
+         syssh = 1
 
          do isys=1,nsys
 
@@ -97,7 +100,8 @@ cv  first for systematic uncert, then for stat.
             if (systype.eq.1) then ! gauss syst
 C ! Introduce asymmetric errors, for Gaussian case only:
                if ( .not. LAsymSyst(isys) ) then
-                  s = s*(1.+ beta(isys,n0) * rand_shift(isys))
+                  !s = s*(1.+ beta(isys,n0) * rand_shift(isys))
+                  syssh = syssh + beta(isys, n0) * rand_shift(isys)
                else
                   if ( rand_shift(isys).gt. 0) then
                      s = s*(1.+ BetaAsym(isys,1,n0) * rand_shift(isys))
@@ -129,7 +133,8 @@ CV now choose sta (advised gauss OR poisson)
          if (statype.eq.1) then ! gauss
 
             alpha(n0) = sorig * alpha_rel ! adjust alpha0, important for theory-like data. 
-            s = s + rndsh * alpha(n0)
+            !s = s + rndsh * alpha(n0)
+            s = (s + rndsh * alpha(n0)) * syssh
 
 c            if (alpha(n0).eq.0) then
 c               s = 0.1
