@@ -816,6 +816,7 @@ C Stat error:
          TotalError = sqrt(TotalError)
 
          DATEN(npoints) = XSections(j)
+         DATEN_SAVE(npoints) = XSections(j)
 
 C  XXXXXXXXXXXXXXXXXXXXXXXXX START to become obsolete !!!
          E_UNC(npoints)  = UncorError

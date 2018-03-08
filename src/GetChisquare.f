@@ -504,11 +504,11 @@ C-----------------------------------------------------
             i = syst_meas_idx(i1,k)
 
             if (scaling_type.eq. isNoRescale) then
-               scale = daten(i)
+               scale = daten_save(i)
             elseif (scaling_type.eq. isLinear) then
                scale = theo(i)
             elseif (scaling_type.eq. isPoisson) then
-               scale = sqrt(theo(i)*daten(i))
+               scale = sqrt(theo(i)*daten_save(i))
             elseif (scaling_type.eq. isLogNorm) then
                scale = theo(i)
                call HF_errlog(271120121,
@@ -600,7 +600,7 @@ C-----------------------------------------------------------
 #include "steering.inc"
       double precision d,t,mix
 C-------------------------------------------------------------
-      d = daten(idx)
+      d = daten_save(idx)
       t = theo(idx)
 
       if ( t.le.0 ) then
@@ -730,9 +730,10 @@ C Re-scale for systematic shifts:
 c protection against negative sum term for ExtraSystRescale case        
          Sum = exp(Sum-1.)
 
-         ScaledErrors(i) = sqrt((Stat*sqrt(Sum))**2+StatConst**2+Unc**2+Offs*daten(i)**2)
+         ScaledErrors(i) = sqrt((Stat*sqrt(Sum))**2+StatConst**2+Unc**2+
+     +                     Offs*daten_save(i)**2)
          ScaledErrorsStat(i) = sqrt((Stat*sqrt(Sum))**2+StatConst**2)
-         ScaledErrorsSyst(i) = sqrt(Unc**2+Offs*daten(i)**2)
+         ScaledErrorsSyst(i) = sqrt(Unc**2+Offs*daten_save(i)**2)
       enddo
 
 C

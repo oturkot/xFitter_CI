@@ -6,6 +6,7 @@ C
 
 
       double precision DATEN(NTOT)   !> Data values
+     $     ,DATEN_SAVE(NTOT)         !> Save initial data values
      $     ,E_UNC(NTOT)              !> Uncorelated uncertainty 
      $     ,E_UNC_Const(NTOT)        !> Uncorelated, unscaled error
      $     ,E_TOT(NTOT)              !> Total uncertainty
@@ -37,7 +38,7 @@ C SG: index of theory bin, if needed
 
       common/indata2/
      + DATEN,E_UNC,E_TOT, E_STA, E_STA_CONST, E_UNC_Const,
-     + JSET,IndexTheoryBin,JPLOT
+     + JSET,IndexTheoryBin,JPLOT,DATEN_SAVE
 
       common/CAbstractBins/AbstractBins,KFactors
 
