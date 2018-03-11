@@ -623,7 +623,7 @@ CCC------------HERE WE FORM ETA FROM PAR
      $ par(1), par(2), par(3), par(4), par(5), par(6), par(7), par(8),
      $ par(1), par(2), par(3), par(4), par(5), par(6), par(7), par(8)  
      $], [4,6])
-      write (190,*) 'CIvarval (in ModImpose)=',CIvarval
+C       write (190,*) 'CIvarval (in ModImpose)=',CIvarval
         
       Return
       End
@@ -675,8 +675,8 @@ C
       DOUBLE PRECISION AEMPI, RPIGG
 C
       DOUBLE PRECISION PARU_101, PARU_001
-      Data PARU_001/3.14159265/,
-     +     PARU_101/0.00729735/
+      Data PARU_001/3.14159265d+0/,
+     +     PARU_101/0.00729735d+0/
 
 C...Purpose: to calculate the running alpha_electromagnetic.
 
@@ -1571,10 +1571,10 @@ C
         Iu2 = 1
       ENDIF
 C
-      SumUK = 0.0
-      SumDK = 0.0
-      SumU1 = 0.0
-      SumD1 = 0.0
+      SumUK = 0.0d+0
+      SumDK = 0.0d+0
+      SumU1 = 0.0d+0
+      SumD1 = 0.0d+0
 C
 C Loop over final state quark family
 C

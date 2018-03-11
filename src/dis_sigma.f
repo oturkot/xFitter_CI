@@ -513,13 +513,16 @@ C   LW: 30.06 CI theory calculation
 C                print*,'CIstudy: Past doCI check. CIindex = ',CIindex
 
                if((CIindex.GT.100).AND.(CIindex.LT.320)) then
+                  
                   if (charge.LT.0.0) then
                      Electron = .TRUE.
                   else 
                      Electron = .FALSE.
                   endif
 
-                  SS = q2(i)/(x(i)*y(i))
+c                  SS = q2(i)/(x(i)*y(i))
+                  SS = (DATASETInfo( GetInfoIndex(IDataSet,'sqrt(S)')
+     $           , IDataSet))**2
 
                   Call hf_get_pdfs(x(i),q2(i),dbPdf)
                   Do iq=1,6
@@ -527,8 +530,8 @@ C                print*,'CIstudy: Past doCI check. CIindex = ',CIindex
                      XQfract(2,iq) = dbPdf(-iq)
                   EndDo
 c diff.dis=0 important for CCDIS                
-                  xsec_LO_SM_CI=0.0
-                  xsec_LO_SM=0.0
+                  xsec_LO_SM_CI=0.0d+0
+                  xsec_LO_SM=0.0d+0
             
                   if(XSecType.eq.'NCDIS')then
                      call DContNC(x(i),q2(i),SS,Eta,Electron,polarity, 
