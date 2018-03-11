@@ -1,4 +1,34 @@
-Cd
+      subroutine on_civarval_mc
+      implicit None
+      include 'steering.inc'
+      include 'CI_models.inc'
+
+
+      if((CIvarvalMC.NE.CIvarval).and.is_CIvarvalMC)then
+        CIvarval_true = CIvarval
+        CIvarval = CIvarvalMC
+        write (666,*) "ON",CIvarval,CIvarvalMC,CIvarval_true
+      Endif
+
+      
+      return
+      end
+
+      subroutine off_civarval_mc
+      implicit None
+      include 'steering.inc'
+      include 'CI_models.inc'
+
+      if((CIvarvalMC.EQ.CIvarval).and.is_CIvarvalMC)then
+        CIvarval = CIvarval_true
+        write (666,*) "OFF",CIvarval,CIvarvalMC,CIvarval_true
+      Endif
+      
+
+      return
+      end
+
+C
 C=================================================================
 C
       Subroutine ModImpose(Eta)

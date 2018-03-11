@@ -421,6 +421,7 @@ c             call fillvfngrid
 * -----------------------------------------------------------
 *     Toy MC samples:
 * -----------------------------------------------------------
+c      call on_civarval_mc
 
       if (IFlag.eq.1 .and. lrand) then
          call MC_Method()         
@@ -441,6 +442,7 @@ c             call fillvfngrid
          enddo
       endif
 
+c      call off_civarval_mc
 *     ---------------------------------------------------------
 *     calculate chisquare
 *     ---------------------------------------------------------
