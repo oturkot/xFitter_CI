@@ -161,13 +161,18 @@ c    external functions and subroutines
 
       integer nvarl(200), NIOFEX(200), neofix(50)
       common/MN7INX/ nvarl, NIOFEX, neofix
-
+      
+      logical :: CIvarstep_gt_0
 
       call LOGO(1)
 *     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
       RqTrue = parminuit(idxCIval)
-      Rqerr  = WERR(NIOFEX(idxCIval))
-
+      CIvarstep_gt_0 = Rqerr .gt. EPSILON(Rqerr)
+      if (CIvarstep_gt_0) then
+         Rqerr  = WERR(NIOFEX(idxCIval))
+      else
+         Rqerr = 0D0
+      end if
 
       call check_CIvarval
       call derivs_to_zero
@@ -180,10 +185,10 @@ c    external functions and subroutines
 
       do i_par = 1, mne
          if(NIOFEX(i_par) .eq. 0) cycle
-         if(WERR(NIOFEX(i_par)) .eq. 0D0) cycle
+         if(WERR(NIOFEX(i_par)) .lt. EPSILON(WERR)) cycle
 
          if(i_par .ne. idxCIval) then
-         needed_pars(nd_prs_end) = i_par
+            needed_pars(nd_prs_end) = i_par
             nd_prs_end = nd_prs_end + 1
          end if
 
@@ -216,7 +221,7 @@ c    external functions and subroutines
                if(i_par .ne. idxCIval) then
                   theta_0(idx, i_par) = (THEO_buffer(idx) - THEO(idx))/
      $                                        WERR(NIOFEX(i_par))
-               else if(doCI) then
+               else if(doCI .and. CIvarstep_gt_0) then
                   m1(idx) = (THEO_buffer(idx) - THEO(idx))/
      $                                (2D0*Rqerr)
                   m2(idx) = (THEO(idx) + THEO_buffer(idx) -2D0*m0(idx))/
@@ -225,7 +230,8 @@ c    external functions and subroutines
             end do
          end do
 
-         if(i_par .eq. idxCIval .or. .not. doCI) goto 663
+         if(i_par.eq.idxCIval .or. .not.doCI .or. .not.CIvarstep_gt_0)
+     >      goto 663
 c               . . . . . . . . . . . . . . . . . . . . . . 
 
          parminuit(idxCIval) = RqTrue + Rqerr
@@ -273,7 +279,7 @@ c               . . . . . . . . . . . . . . . . . . . . . .
       end do
 *     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
 
-      if(doCI) then
+      if(doCI .and. CIvarstep_gt_0) then
          theta_1 = (theta_p - theta_m) / (2.D0*Rqerr)
          theta_2 = (theta_p + theta_m - theta_0*2.D0) / (2.D0*Rqerr**2)
       end if
@@ -299,7 +305,7 @@ c               . . . . . . . . . . . . . . . . . . . . . .
 
       subroutine check_CIvarval
       implicit none
-      if(RqTrue .ne. 0d0) then
+      if(ABS(RqTrue) .gt. EPSILON(RqTrue)) then
          print*,"Warning: CIvarval is not zero! Continue anyway? (y/n):"
  
  701     continue
