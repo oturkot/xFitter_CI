@@ -1932,7 +1932,7 @@ C  Read the CI namelist:
  131  continue
       close (51)
 
-      if (CIalphaemrun_func .eq. 'aemrun' .and. ewfit .le. 0)
+      if (CIrunning_alphaem .and. CIalphaemrun_func.eq.'aemrun' .and. ewfit.le.0)
      >   call eprc_init(.true.)
 
 
