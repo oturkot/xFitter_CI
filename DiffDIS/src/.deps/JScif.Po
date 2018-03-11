@@ -1,1 +1,0 @@
-JScif.o: JScif.c
