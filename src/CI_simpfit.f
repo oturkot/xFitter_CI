@@ -184,7 +184,7 @@ c    external functions and subroutines
       m0 = THEO
 
       do i_par = 1, mne
-         write (666,*) NIOFEX(i_par), WERR(NIOFEX(i_par))
+
 
          if(NIOFEX(i_par) .eq. 0) cycle
          if(WERR(NIOFEX(i_par)) .lt. EPSILON(WERR)) cycle

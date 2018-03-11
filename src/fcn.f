@@ -133,7 +133,7 @@ C------------------------------------------------------------------------------
       implicit none
 C--------------------------------------------------------------
       integer iflag
-
+#include "CI_models.inc"
 #include "steering.inc"
 #include "pdfparam.inc"
 #include "for_debug.inc"
@@ -214,7 +214,9 @@ c updf stuff
 C Penalty from MINUIT extra parameters constraints
       double precision extraparsconstrchi2
 
-
+      if (iflag.eq.1) then
+        call on_civarval_mc(CIvarval_true)
+      endif
 C--OZ 21.04.2016 Increment IfcnCount here instead of fcn routine
       IfcnCount=IfcnCount+1
       if (lprint) then
@@ -306,9 +308,9 @@ C
          call LeaveOnlyValenceQuarks
       endif
 
-*     ---------------------------------------------------------  	 
+*     ---------------------------------------------------------    
 *     Call evolution
-*     ---------------------------------------------------------  	 
+*     ---------------------------------------------------------    
       if (Debug) then
          print*,'before evolution'
       endif
@@ -359,10 +361,10 @@ c             call fillvfngrid
       endif
 
 
-	
-*     ---------------------------------------------------------  	 
+  
+*     ---------------------------------------------------------    
 *     Initialise theory calculation per iteration
-*     ---------------------------------------------------------  	 
+*     ---------------------------------------------------------    
       call GetTheoryIteration
       if(itheory.ge.103) call GetGridkt
 
@@ -370,10 +372,10 @@ c             call fillvfngrid
       if (Debug) then
          print*,'after GetTheoryIteration'
       endif
-		 
-*     ---------------------------------------------------------  	       
+     
+*     ---------------------------------------------------------          
 *     Calculate theory for datasets:
-*     ---------------------------------------------------------  	 
+*     ---------------------------------------------------------    
       do idataset=1,NDATASETS
          if(NDATAPOINTS(idataset).gt.0) then
             call GetTheoryForDataset(idataset)
@@ -395,8 +397,8 @@ c             call fillvfngrid
    99 continue
 
 
-*     ---------------------------------------------------------  	 
-*     Start of loop over data points: 	 
+*     ---------------------------------------------------------    
+*     Start of loop over data points:    
 *     ---------------------------------------------------------
 
       do 100 i=1,npoints
@@ -421,8 +423,7 @@ c             call fillvfngrid
 * -----------------------------------------------------------
 *     Toy MC samples:
 * -----------------------------------------------------------
-c      call on_civarval_mc
-
+  
       if (IFlag.eq.1 .and. lrand) then
          call MC_Method()         
       endif 
@@ -442,7 +443,9 @@ c      call on_civarval_mc
          enddo
       endif
 
-c      call off_civarval_mc
+      if (iflag.eq.1) then
+        call off_civarval_mc(CIvarval_true)
+      endif
 *     ---------------------------------------------------------
 *     calculate chisquare
 *     ---------------------------------------------------------

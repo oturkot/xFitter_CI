@@ -1,4 +1,4 @@
-      subroutine on_civarval_mc
+      subroutine on_civarval_mc(CIvarval_true)
       implicit None
       include 'steering.inc'
       include 'CI_models.inc'
@@ -10,22 +10,18 @@
         write (666,*) "ON",CIvarval,CIvarvalMC,CIvarval_true
       Endif
 
-      
-      return
       end
 
-      subroutine off_civarval_mc
+      subroutine off_civarval_mc(CIvarval_true)
       implicit None
       include 'steering.inc'
       include 'CI_models.inc'
 
-      if((CIvarvalMC.EQ.CIvarval).and.is_CIvarvalMC)then
+      if((CIvarval_true.NE.CIvarval).and.is_CIvarvalMC)then
         CIvarval = CIvarval_true
         write (666,*) "OFF",CIvarval,CIvarvalMC,CIvarval_true
       Endif
       
-
-      return
       end
 
 C
