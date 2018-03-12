@@ -133,7 +133,6 @@ C------------------------------------------------------------------------------
       implicit none
 C--------------------------------------------------------------
       integer iflag
-#include "CI_models.inc"
 #include "steering.inc"
 #include "pdfparam.inc"
 #include "for_debug.inc"
@@ -211,12 +210,9 @@ c updf stuff
       double precision rmass,rmassp,rcharge
       COMMON /MASSES/ rmass(150),rmassp(50),rcharge(150)
 
-C Penalty from MINUIT extra parameters constraints
+C Penalty from MINUIT extra parameters constraints-
       double precision extraparsconstrchi2
 
-      if (iflag.eq.1) then
-        call on_civarval_mc(CIvarval_true)
-      endif
 C--OZ 21.04.2016 Increment IfcnCount here instead of fcn routine
       IfcnCount=IfcnCount+1
       if (lprint) then
@@ -426,6 +422,7 @@ c             call fillvfngrid
   
       if (IFlag.eq.1 .and. lrand) then
          call MC_Method()         
+         call change_CIvarval()
       endif 
 
       if (IFlag.eq.1) then
@@ -443,9 +440,6 @@ c             call fillvfngrid
          enddo
       endif
 
-      if (iflag.eq.1) then
-        call off_civarval_mc(CIvarval_true)
-      endif
 *     ---------------------------------------------------------
 *     calculate chisquare
 *     ---------------------------------------------------------

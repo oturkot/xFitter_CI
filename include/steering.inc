@@ -221,12 +221,12 @@ c<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>
 C     11/06/2014 LW
 C     Namelist for the CI analyses
 
-      logical doCI, CIDoSimpFit, CIrunning_alphaem, is_CIvarvalMC
+      logical doCI, CIDoSimpFit, CIrunning_alphaem, change_CIvarval_afterMC
       character*32 CItype, CIname, CISimpFitStep, CIalphaemrun_func
       integer CIindex, idxCIval
-      double precision CIvarval, CIvarstep, CIvarmin, CIvarmax, CIvarvalMC
+      double precision CIvarval, CIvarstep, CIvarmin, CIvarmax, CIvarval_afterMC
       common/CIvars/CIindex,idxCIval,CItype,CIname,
      $    CIvarval,CIvarstep,CIvarmin,CIvarmax,doCI,
      $    CIDoSimpFit, CISimpFitStep, CIrunning_alphaem, CIalphaemrun_func,
-     $    is_CIvarvalMC, CIvarvalMC
+     $    change_CIvarval_afterMC, CIvarval_afterMC
 c<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>

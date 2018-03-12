@@ -1,29 +1,17 @@
-      subroutine on_civarval_mc(CIvarval_true)
+      subroutine change_CIvarval()
       implicit None
-      include 'steering.inc'
       include 'CI_models.inc'
+      include 'steering.inc'
 
-
-      if((CIvarvalMC.NE.CIvarval).and.is_CIvarvalMC)then
-        CIvarval_true = CIvarval
-        CIvarval = CIvarvalMC
-        write (666,*) "ON",CIvarval,CIvarvalMC,CIvarval_true
-      Endif
+      write (666,*) "change_CIvarval_afterMC is called"
+      If (change_CIvarval_afterMC)then
+        write (666,*) "CIvarval_1 = ",CIvarval
+        CIvarval = CIvarval_afterMC
+        write (666,*) "CIvarval_2 = ",CIvarval
+      EndIf
 
       end
-
-      subroutine off_civarval_mc(CIvarval_true)
-      implicit None
-      include 'steering.inc'
-      include 'CI_models.inc'
-
-      if((CIvarval_true.NE.CIvarval).and.is_CIvarvalMC)then
-        CIvarval = CIvarval_true
-        write (666,*) "OFF",CIvarval,CIvarvalMC,CIvarval_true
-      Endif
-      
-      end
-
+  
 C
 C=================================================================
 C

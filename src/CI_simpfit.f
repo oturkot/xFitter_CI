@@ -175,7 +175,7 @@ C     ------------------------------------------------------------------
       if (NIOFEX(idxCIval).gt.0) Rqerr = WERR(NIOFEX(idxCIval))
       CIvarstep_gt_0 = Rqerr .gt. EPSILON(Rqerr)
 
-      call check_CIvarval
+C       call check_CIvarval
       call derivs_to_zero
 
       nd_prs_end = 1
