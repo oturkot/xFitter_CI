@@ -164,15 +164,16 @@ c    external functions and subroutines
       
       logical :: CIvarstep_gt_0
 
+
+      Data Rqerr/0D0/
+
+
       call LOGO(1)
-*     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
+C     ------------------------------------------------------------------
+
       RqTrue = parminuit(idxCIval)
+      if (NIOFEX(idxCIval).gt.0) Rqerr = WERR(NIOFEX(idxCIval))
       CIvarstep_gt_0 = Rqerr .gt. EPSILON(Rqerr)
-      if (CIvarstep_gt_0) then
-         Rqerr  = WERR(NIOFEX(idxCIval))
-      else
-         Rqerr = 0D0
-      end if
 
       call check_CIvarval
       call derivs_to_zero
