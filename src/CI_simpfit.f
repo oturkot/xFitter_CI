@@ -371,6 +371,9 @@ c     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
          call LOGO(0)
       end if
       
+      call PDF_Param_Iteration(parminuit, iflag)
+      if(doCI) CIvarval = parminuit(idxCIval)
+
 
       kflag=0
       if (Itheory.eq.0.or.Itheory.eq.10.or.itheory.eq.11.or.itheory.eq.35)
@@ -380,7 +383,6 @@ c     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
          write(6,*) ' --- problem in SumRules, kflag = 1'
          call HF_errlog(12020516,'F: problem in SumRules, kflag = 1')
       endif
-
 
       THEO = m0
 
