@@ -1,17 +1,22 @@
-      subroutine change_CIvarval()
-      implicit None
-      include 'CI_models.inc'
-      include 'steering.inc'
+C U - is array in minuit where param. are stored
+C change_U - change U after MC_replica gen.
 
-      write (666,*) "change_CIvarval_afterMC is called"
-      If (change_CIvarval_afterMC)then
-        write (666,*) "CIvarval_1 = ",CIvarval
-        CIvarval = CIvarval_afterMC
-        write (666,*) "CIvarval_2 = ",CIvarval
-      EndIf
+      SUBROUTINE watch_U
+#include "d506dp.inc"
+#include "d506cm.inc"
+      do i=1,SIZE(U)
+         write(666,*) i,' ',U(i)
+      enddo
+      END
 
-      end
-  
+      SUBROUTINE change_U
+#include "d506dp.inc"
+#include "d506cm.inc"
+#include "steering.inc"
+      IF(change_CIvarval_afterMC)THEN
+            U(idxCIval)=CIvarval_afterMC
+      ENDIF
+      END
 C
 C=================================================================
 C

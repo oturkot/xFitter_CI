@@ -34,11 +34,16 @@ C function:
 ! ---]
 
 C-----------------------------------------------------------------
-      
+
 C Store FCN flag in a common block:
       IFlagFCN = IFlag
 
       NparFCN  = npar
+
+C Check fcn() call and its status iflag
+c      write(666,*) 'subroutine fcn() was called', iflag, npar
+c      call watch_U
+C The end of ckeck      
 
 C Count number of FCN calls:
       if (iflag.eq.3) then
@@ -100,6 +105,7 @@ C Print MINUIT extra parameters
       if(doCI) then
         CIvarval = parminuit(idxCIval)
         print *,'CI minuit readout test, CIvarval = ',CIvarval
+c        write (666,*) 'from fcn:', CIvarval
 C        print *,'in minuit CI index = ',idxCIval
 C        print *,'in minuit CI parameter = ',parminuit(idxCIval)
       endif
@@ -421,8 +427,9 @@ c             call fillvfngrid
 * -----------------------------------------------------------
   
       if (IFlag.eq.1 .and. lrand) then
-         call MC_Method()         
-         call change_CIvarval()
+         call MC_Method()
+* After generating mc replica -> change global CIvarval->0                           
+         call change_U
       endif 
 
       if (IFlag.eq.1) then
