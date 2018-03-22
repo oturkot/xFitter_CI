@@ -1918,9 +1918,10 @@ C<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
       implicit none
       include 'steering.inc'
 
-      external :: eprc_init
+      external :: eprc_init, RDPDFSRDOUT
 
-      data dopdfsrdout /.false./,
+      data dowrpdfsrdout /.false./,
+     >     dordpdfsrdout /.false./,
      >     pdfsrdout_f /"pdfs.out"/,
      >     pdfsrdout_u /89098/
 C---------------------------------------------
@@ -1928,7 +1929,8 @@ C
 C CI namelist
       namelist/CIstudy/ doCI, CItype, CIvarval, CIvarstep,
      &                  CIrunning_alphaem, CIDoSimpFit, CISimpFitStep,
-     &                  CIalphaemrun_func, dopdfsrdout, pdfsrdout_f
+     &                  CIalphaemrun_func, dowrpdfsrdout, dordpdfsrdout,
+     &                  pdfsrdout_f
 C  Read the CI namelist:
       open (51,file='steering.txt',status='old')
       read (51,NML=CIstudy,ERR=134,end=131)
@@ -1952,8 +1954,10 @@ C  Read the CI namelist:
 
 
       if (doCI) then
-        if (dopdfsrdout)
+        if (dowrpdfsrdout)
      >    open (pdfsrdout_u, file=TRIM(pdfsrdout_f), status='unknown')
+
+        if (dordpdfsrdout) call RDPDFSRDOUT
 
         CIindex = 0
         idxCIval = 0

@@ -226,7 +226,7 @@ C
       integer CIindex, idxCIval
       double precision CIvarval, CIvarstep, CIvarmin, CIvarmax
 
-			logical      :: dopdfsrdout
+			logical      :: dowrpdfsrdout, dordpdfsrdout
 			character*64 :: pdfsrdout_f
 			integer      :: pdfsrdout_u
 
@@ -234,5 +234,6 @@ C
      $    CIvarval,CIvarstep,CIvarmin,CIvarmax,doCI,
      $    CIDoSimpFit, CISimpFitStep, CIrunning_alphaem, CIalphaemrun_func
 
-		 	common/PDFsrdout/ dopdfsrdout, pdfsrdout_f, pdfsrdout_u
+		 	common/PDFsrdout/ dowrpdfsrdout, dordpdfsrdout,
+     >                  pdfsrdout_f, pdfsrdout_u
 c<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>

@@ -521,13 +521,16 @@ C                print*,'CIstudy: Past doCI check. CIindex = ',CIindex
 
                   SS = q2(i)/(x(i)*y(i))
 
-                  Call hf_get_pdfs(x(i),q2(i),dbPdf)
-                  Do iq=1,6
-                     XQfract(1,iq) = dbPdf(iq)
-                     XQfract(2,iq) = dbPdf(-iq)
-                  EndDo
-
-                  if (dopdfsrdout) write (pdfsrdout_u, *) idx, XQfract
+                  if (dordpdfsrdout) then
+                    XQfract = pdfsgrid(idx,:,:)
+                  else
+                    Call hf_get_pdfs(x(i),q2(i),dbPdf)
+                    Do iq=1,6
+                       XQfract(1,iq) = dbPdf(iq)
+                       XQfract(2,iq) = dbPdf(-iq)
+                    EndDo
+                    if (dowrpdfsrdout) write (pdfsrdout_u, *)idx,XQfract
+                  end if
 
 
 c diff.dis=0 important for CCDIS                

@@ -384,7 +384,7 @@ c             call fillvfngrid
          endif
       enddo
 
-      if (doci .and. dopdfsrdout) then
+      if (doci .and. dowrpdfsrdout) then
          close (pdfsrdout_u)
          print*, "PDFs readout done. Aborting..."
          call HF_STOP

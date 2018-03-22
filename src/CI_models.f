@@ -7,7 +7,7 @@ C Impose parameter relations in given model
 
 
       Implicit None
-      include 'CI_models.inc'
+#include "CI_models.inc"
       include 'steering.inc'
 C       Real*8 par(8)
 C       REAL, DIMENSION(4,6) :: Eta
@@ -739,7 +739,7 @@ C
 CCCC      include 'cimodel.inc'
       include 'steering.inc'
       include 'couplings.inc'
-      include 'CI_models.inc'
+#include "CI_models.inc"
 C
 C     --- First: a few constants
 C
@@ -1206,7 +1206,7 @@ C
 CCC      include 'cimodel.inc'
       include 'steering.inc'
       include 'couplings.inc'
-      include 'CI_models.inc'
+#include "CI_models.inc"
 C
 CCC      Real*8 Pi, GeVNb
 CCC      Data Pi/3.14159265/
@@ -1394,7 +1394,7 @@ C
 
       include 'steering.inc'
       include 'couplings.inc'
-      include 'CI_models.inc'
+#include "CI_models.inc"
 
 CC      Real*8 Pi, GeVNb, Wmass, Sin2T, KM(3,3)
       DOUBLE PRECISION GeVNb, KM(3,3)
@@ -1654,7 +1654,7 @@ C
       
       Integer isdx
       include 'steering.inc'
-      include 'CI_models.inc'
+#include "CI_models.inc"
       open(112,file="CIpdfLO_out.txt",action="write",status="replace")
       
       Do isdx=1,5000
@@ -1679,7 +1679,7 @@ C
 
       Integer irdx
       include 'steering.inc'
-      include 'CI_models.inc'
+#include "CI_models.inc"
 
       open(114,file="CIpdfLO_in.txt",action="read")
 
@@ -1720,8 +1720,8 @@ C
       Data CIX/0.1, 0.2, 0.3, 0.4, 0.5, 0.6/
 c      Data OutFile/"./CI_output/CI_LOration.txt"/
       
-      include 'steering.inc'
-      include 'CI_models.inc'
+#include "steering.inc"
+#include "CI_models.inc"
 
       CIS = (318.0)**2
 
@@ -1809,4 +1809,45 @@ c      Data OutFile/"./CI_output/CI_LOration.txt"/
       Return
       End
 
+
+C ----------------------------------------------------------------------
+C> @brief Read PDFs grid from file spcified in **PDFsRdout_f**.
+C>
+C     ======================
+      SUBROUTINE RDPDFSRDOUT
+C     ======================
+
+      implicit none
+#include "ntot.inc"      ! ntot
+#include "CI_models.inc" ! pdfsgrid
+#include "steering.inc"  ! pdfsrdout_u, pdfsrdout_f
+      integer :: i, idx
+      double precision :: pdf(2,7)
+
+      external :: HF_STOP
+
+      open (pdfsrdout_u, file=pdfsrdout_f, status='old', err=1)
+
+      pdfsgrid = pdfsgrid * 0D0
+      DO
+        read (pdfsrdout_u, *, err=2, end=3) idx, pdf
+        IF (idx.le.0 .or. idx.gt.ntot) THEN
+           print *, "Error: invalid data index in "//TRIM(pdfsrdout_f)
+           call HF_STOP
+        END IF
+        pdfsgrid(idx,:,:) = pdf
+      END DO
+
+
+    1 continue
+      print *, "Error: failed to opean "//TRIM(pdfsrdout_f)
+      call HF_STOP
+
+    2 continue
+      print *, "Error: failed to read PDFs"
+      call HF_STOP
+
+    3 continue
+      close (pdfsrdout_u)
+      END SUBROUTINE RDPDFSRDOUT
 
