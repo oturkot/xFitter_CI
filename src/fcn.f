@@ -384,6 +384,12 @@ c             call fillvfngrid
          endif
       enddo
 
+      if (doci .and. dopdfsrdout) then
+         close (pdfsrdout_u)
+         print*, "PDFs readout done. Aborting..."
+         call HF_STOP
+      end if
+
       if (Debug) then
          print*,'after GetTheoryfordataset'
       endif

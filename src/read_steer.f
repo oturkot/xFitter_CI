@@ -1919,12 +1919,16 @@ C<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
       include 'steering.inc'
 
       external :: eprc_init
+
+      data dopdfsrdout /.false./,
+     >     pdfsrdout_f /"pdfs.out"/,
+     >     pdfsrdout_u /89098/
 C---------------------------------------------
 C
 C CI namelist
       namelist/CIstudy/ doCI, CItype, CIvarval, CIvarstep,
      &                  CIrunning_alphaem, CIDoSimpFit, CISimpFitStep,
-     &                  CIalphaemrun_func
+     &                  CIalphaemrun_func, dopdfsrdout, pdfsrdout_f
 C  Read the CI namelist:
       open (51,file='steering.txt',status='old')
       read (51,NML=CIstudy,ERR=134,end=131)
@@ -1948,6 +1952,9 @@ C  Read the CI namelist:
 
 
       if (doCI) then
+        if (dopdfsrdout)
+     >    open (pdfsrdout_u, file=TRIM(pdfsrdout_f), status='unknown')
+
         CIindex = 0
         idxCIval = 0
         CIvarmin = 0. 

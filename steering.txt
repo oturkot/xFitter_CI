@@ -405,4 +405,13 @@
 
   CIDoSimpFit = .false.
   CISimpFitStep = "SimpFit"
+
+	!# PDFs readout (optional).
+	!# Note: `doCI` must be set to `true` or this block will be ignored.
+	!
+	!# Enable PDFs readout: (default:false)
+	! doPDFsRdout = true 
+	!
+	!# Name of output file: (default:"pdfs.out")
+	! PDFsRdout = "pdfs.out"
 &End

@@ -526,6 +526,10 @@ C                print*,'CIstudy: Past doCI check. CIindex = ',CIindex
                      XQfract(1,iq) = dbPdf(iq)
                      XQfract(2,iq) = dbPdf(-iq)
                   EndDo
+
+                  if (dopdfsrdout) write (pdfsrdout_u, *) idx, XQfract
+
+
 c diff.dis=0 important for CCDIS                
                   xsec_LO_SM_CI=0.0
                   xsec_LO_SM=0.0
