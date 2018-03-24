@@ -10,11 +10,12 @@ C------------------------------------VARIABLES
 C------------------------------------COUPLINGS
       DOUBLE PRECISION CILQmass, CILQres, CILQwidth
 
-C-----------------------------------PDFs GRID
 #ifdef NTOT_C
+C-----------------------------------------------------------------------
 C> @brief Grid with PDFs for each datapoint (THEO).
 C>
 C> @note Format corresponds to `XQfrac`.
-C>
-			DOUBLE PRECISION :: pdfsgrid(NTOT_C, 2, 7)
+C ----------------------------------------------------------------------
+		DOUBLE PRECISION :: pdfsgrid(NTOT_C, 2, 7)
+		COMMON/CIPDFs/ pdfsgrid
 #endif
