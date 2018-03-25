@@ -386,8 +386,6 @@ c     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
       THEO = m0
 
       do i_par = 1, mne
-         if(NIOFEX(i_par) .eq. 0) cycle
-
          do i_dat = 1, ndatasets
             do i = 1, NDATAPOINTS(i_dat)
                idx = DATASETIDX(i_dat, i)
