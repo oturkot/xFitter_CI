@@ -174,6 +174,7 @@ C     ------------------------------------------------------------------
       RqTrue = parminuit(idxCIval)
       if (NIOFEX(idxCIval).gt.0) Rqerr = WERR(NIOFEX(idxCIval))
       CIvarstep_gt_0 = Rqerr .gt. EPSILON(Rqerr)
+      print*, "CIvarstep_gt_0",CIvarstep_gt_0
 
 C       call check_CIvarval
       call derivs_to_zero
@@ -388,8 +389,6 @@ c     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
       THEO = m0
 
       do i_par = 1, mne
-         if(NIOFEX(i_par) .eq. 0) cycle
-
          do i_dat = 1, ndatasets
             do i = 1, NDATAPOINTS(i_dat)
                idx = DATASETIDX(i_dat, i)
