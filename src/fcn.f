@@ -214,6 +214,7 @@ c updf stuff
 C Penalty from MINUIT extra parameters constraints
       double precision extraparsconstrchi2
 
+      external DENCEPDFS
 
 C--OZ 21.04.2016 Increment IfcnCount here instead of fcn routine
       IfcnCount=IfcnCount+1
@@ -370,7 +371,12 @@ c             call fillvfngrid
       if (Debug) then
          print*,'after GetTheoryIteration'
       endif
-		 
+
+      
+      if (dodencepdfs .and. trim(dencepdfsmod).eq."before")
+     >   call DENCEPDFS
+
+
 *     ---------------------------------------------------------  	       
 *     Calculate theory for datasets:
 *     ---------------------------------------------------------  	 

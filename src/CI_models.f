@@ -1851,3 +1851,40 @@ C     ======================
       close (pdfsrdout_u)
       END SUBROUTINE RDPDFSRDOUT
 
+C     ====================
+      SUBROUTINE DENCEPDFS
+C     ====================
+
+      implicit none
+      DOUBLE PRECISION :: x, dx, q2, pdfs(-6:6)
+      
+      PARAMETER (q2 = 10, dx = 1D-3)
+      DATA pdfs /13*0D0/
+
+      EXTERNAL :: HF_GET_PDFS, HF_STOP
+
+      open (92356, file="PDFs-10GeV.out", status='unknown', err=1)
+      write(92356, '(''# x tbar bbar cbar sbar dbar ubar g u d s c b t'')')
+
+      write (*, '(''Starting PDFs readout...'')')
+      x = 1D-3
+      DO 
+         IF ((x - 0.999) .ge. 0D0) exit
+         call HF_GET_PDFS(x, q2, pdfs)
+         write(92356, *) x, pdfs
+
+         x = x*exp(dx)
+      END DO
+      print '('' done'')'
+
+      print '(''------------------------------------'')'
+      print '(''Dence PDFs readout done. Aborting...'')'
+      print '(''------------------------------------'')'
+      call HF_STOP
+
+    1 continue
+      print *, "Error: failed to open file for PDFs."
+      call HF_STOP
+      END SUBROUTINE DENCEPDFS
+
+

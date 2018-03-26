@@ -109,7 +109,7 @@ c ..........................................................
       else
         CorSysIndex = 0
       endif
-      
+
       if (doOffset .and. CorSysIndex .gt. NSYSMAX) then
         do CorSysIndex = 0,nOffset
           call Do_Fit

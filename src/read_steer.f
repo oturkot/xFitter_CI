@@ -1923,20 +1923,35 @@ C<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
       data dowrpdfsrdout /.false./,
      >     dordpdfsrdout /.false./,
      >     pdfsrdout_f /"pdfs.out"/,
-     >     pdfsrdout_u /89098/
+     >     pdfsrdout_u /89098/,
+     >     dodencepdfs /.false./,
+     >     dencepdfsmod /"before"/
 C---------------------------------------------
 C
 C CI namelist
       namelist/CIstudy/ doCI, CItype, CIvarval, CIvarstep,
      &                  CIrunning_alphaem, CIDoSimpFit, CISimpFitStep,
      &                  CIalphaemrun_func, dowrpdfsrdout, dordpdfsrdout,
-     &                  pdfsrdout_f
+     &                  pdfsrdout_f, DoDencePDFs, DencePDFsMod
 C  Read the CI namelist:
       open (51,file='steering.txt',status='old')
       read (51,NML=CIstudy,ERR=134,end=131)
  
  131  continue
       close (51)
+
+      if (dodencepdfs) then
+         select case (trim(dencepdfsmod))
+            case ("before","after")
+               write (*, '(''=== Dence PDFs readout activated'')')
+               write (*, '(''=== mode: '', A6)') trim(dencepdfsmod)
+            case default
+               write (*, '(''Error: ivalid DencePDFsMod: '', A64)')
+     >               trim(dencepdfsmod)
+               print '(''Aborting...'')'
+               call hf_stop
+         end select
+      end if
 
       if (CIrunning_alphaem .and. CIalphaemrun_func.eq.'aemrun' .and. ewfit.le.0)
      >   call eprc_init(.true.)
