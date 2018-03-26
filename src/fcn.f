@@ -373,8 +373,10 @@ c             call fillvfngrid
       endif
 
       
-      if (dodencepdfs .and. trim(dencepdfsmod).eq."before")
-     >   call DENCEPDFS
+      if (dodencepdfs .and. trim(dencepdfsmod).eq."before") then
+         call DENCEPDFS
+         call HF_STOP
+      end if
 
 
 *     ---------------------------------------------------------  	       

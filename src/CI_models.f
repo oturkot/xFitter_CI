@@ -1856,6 +1856,7 @@ C     ====================
 C     ====================
 
       implicit none
+#include "steering.inc"
       DOUBLE PRECISION :: x, dx, q2, pdfs(-6:6)
       
       PARAMETER (q2 = 10, dx = 1D-3)
@@ -1878,9 +1879,9 @@ C     ====================
       print '('' done'')'
 
       print '(''------------------------------------'')'
-      print '(''Dence PDFs readout done. Aborting...'')'
+      print '(''      Dence PDFs readout done.      '')'
       print '(''------------------------------------'')'
-      call HF_STOP
+      dodencepdfs = .false.
 
     1 continue
       print *, "Error: failed to open file for PDFs."
