@@ -456,9 +456,6 @@ C     !> begin CI models output
       endif
  102  format (I5,'   ','''',A,'''','  ',4ES12.5)
        !> end CI models output
-
-      if (ifcn3.eq.1 .and. dodencepdfs .and. trim(dencepdfsmod).eq."after")
-     >   call DENCEPDFS
 C-------------------------------------------------------------
       end
 

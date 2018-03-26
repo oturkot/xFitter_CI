@@ -555,6 +555,7 @@ c Penalty from MINUIT extra parameters constraints
       endif
 
       if (iflag.eq.3) then
+         if (dodencepdfs .and. trim(dencepdfsmod).eq."after") call DENCEPDFS
 !          write(85,*),'NFCN3 ',nfcn3
          write(85,'(''After minimisation '',F10.2,I6,F10.3)'),chi2out,ndf,chi2out/ndf
 !          if (doOffset .and. iflag.eq.3)

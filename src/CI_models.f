@@ -1862,12 +1862,13 @@ C     ====================
       PARAMETER (q2 = 10, dx = 1D-3)
       DATA pdfs /13*0D0/
 
-      EXTERNAL :: HF_GET_PDFS, HF_STOP
+      EXTERNAL :: HF_GET_PDFS, HF_STOP, EVOLUTION
 
       open (92356, file="PDFs-10GeV.out", status='unknown', err=1)
       write(92356, '(''# x tbar bbar cbar sbar dbar ubar g u d s c b t'')')
 
       write (*, '(''Starting PDFs readout...'')')
+      call EVOLUTION
       x = 1D-3
       DO 
          IF ((x - 0.999) .ge. 0D0) exit
@@ -1882,6 +1883,7 @@ C     ====================
       print '(''      Dence PDFs readout done.      '')'
       print '(''------------------------------------'')'
       dodencepdfs = .false.
+      return
 
     1 continue
       print *, "Error: failed to open file for PDFs."
