@@ -1859,7 +1859,7 @@ C     ====================
 #include "steering.inc"
       DOUBLE PRECISION :: x, dx, q2, pdfs(-6:6)
       
-      PARAMETER (q2 = 10, dx = 1D-3)
+      PARAMETER (q2 = 10, dx = 1D-2)
       DATA pdfs /13*0D0/
 
       EXTERNAL :: HF_GET_PDFS, HF_STOP, EVOLUTION
