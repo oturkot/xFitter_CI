@@ -1869,7 +1869,7 @@ C     ====================
 
       write (*, '(''Starting PDFs readout...'')')
       call EVOLUTION
-      x = 1D-3
+      x = 1D-4
       DO 
          IF ((x - 0.999) .ge. 0D0) exit
          call HF_GET_PDFS(x, q2, pdfs)
