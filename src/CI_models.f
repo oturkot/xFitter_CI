@@ -350,7 +350,7 @@ C  RL
         par(8) =  0
 
 C  RR 
-      ElseIf(CIindex.EQ.118)then
+      ElseIf(CIindex.EQ.119)then
         par(1) =  0
         par(2) =  0
         par(3) =  0
