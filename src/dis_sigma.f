@@ -389,7 +389,7 @@ c H1qcdfunc
 C-------CI_models variables
       DOUBLE PRECISION               :: xsec_LO_SM_CI, xsec_LO_SM
       DOUBLE PRECISION, DIMENSION(3) :: Eta3
-      DOUBLE PRECISION               :: XQfract(2,7)
+      DOUBLE PRECISION               :: XQfract(2,6)
       logical                        :: Electron
       double precision               :: dbPdf
       dimension                      :: dbPdf(-6:6)
@@ -541,7 +541,8 @@ c diff.dis=0 important for CCDIS
               
                   if(XSecType.eq.'CCDIS')then
                      call DContCC(x(i),q2(i),SS,Eta3,Electron,polarity,
-     +                  XQfract, xsec_LO_SM, xsec_LO_SM_CI, Status ) 
+     +                  Mw, alphaem, XQfract, xsec_LO_SM, xsec_LO_SM_CI,
+     +                  Status ) 
                   endif
 
                   if((xsec_LO_SM_CI.GT.0.).AND.(xsec_LO_SM.GT.0.))then 
