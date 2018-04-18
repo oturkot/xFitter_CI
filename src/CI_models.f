@@ -623,7 +623,7 @@ CCC------------HERE WE FORM ETA FROM PAR
      $ par(1), par(2), par(3), par(4), par(5), par(6), par(7), par(8),
      $ par(1), par(2), par(3), par(4), par(5), par(6), par(7), par(8)  
      $], [4,6])
-      write (190,*) 'CIvarval (in ModImpose)=',CIvarval
+c      write (190,*) 'CIvarval (in ModImpose)=',CIvarval
         
       Return
       End
@@ -1193,9 +1193,9 @@ C                + Eta3(eR-g-eR)(qL-g-qL) + Eta4(eR-g-eR)(qR-g-qR)
 C
 C
       SUBROUTINE DContNC( X, Q2, S, Eta, Electron, Polar, Zmass,
-     +                    Alpha, XQfract, DisCross, ConCross, Status )
+     +      Alpha, XQfract, DisCross, ConCross, Status )
       IMPLICIT NONE
-      DOUBLE PRECISION X, Q2, S, XQfract(2,7), Polar, Zmass, Alpha
+      DOUBLE PRECISION X, Q2, S, XQfract(2,6), Polar, Zmass, Alpha
       DOUBLE PRECISION DisCross, ConCross
 C      Real*8 Eta(4,6)
       Integer Status
@@ -1212,8 +1212,8 @@ CCC      Real*8 Pi, GeVNb
 CCC      Data Pi/3.14159265/
 C
 C     Conversion from GeV^-2 to nbarn
-      DOUBLE PRECISION GeVNb
-      Data GeVNb/0.38937966E9/
+c      DOUBLE PRECISION GeVNb
+c      Data GeVNb/0.389379338d9/
 C
       DOUBLE PRECISION Eta0(4,6)
       Data Eta0/24*0./
@@ -1308,8 +1308,8 @@ C
          ConCross = ConCross + EDgg
          EndIf
 C
-      DisCross = GeVnb/(16.*pi*X)  * DisCross
-      ConCross = GeVnb/(16.*pi*X)  * ConCross 
+      DisCross = convfac/(16.*pi*X)  * DisCross
+      ConCross = convfac/(16.*pi*X)  * ConCross 
 C
       IF (S*X.LT.Q2) THEN
         Status = 1
@@ -1381,11 +1381,12 @@ C        eta * (e*gam_u*(1+gam_5)*n)(u*gam_u*(1+gam_5)*d)
 C
 C        Here the contact terms do NOT couple KM mixed quark species.
 C 
-      SUBROUTINE DContCC( X, Q2, S, Eta3, Electron, 
-     +             Polar, XQfract, DisCross, ConCross, Status )
+      SUBROUTINE DContCC( X, Q2, S, Eta3, Electron,
+     +      Polar, Wmass, Alpha, XQfract, DisCross, ConCross, Status )
       IMPLICIT NONE
-      DOUBLE PRECISION X, Q2, S, XQfract(2,7), Polar
-      DOUBLE PRECISION  Eta3(3), DisCross, ConCross
+      DOUBLE PRECISION X, Q2, S, XQfract(2,6), Polar
+      DOUBLE PRECISION Eta3(3), DisCross, ConCross
+      DOUBLE PRECISION Alpha, Wmass
       Integer Status
       Logical Electron
 C
@@ -1397,12 +1398,13 @@ C
       include 'CI_models.inc'
 
 CC      Real*8 Pi, GeVNb, Wmass, Sin2T, KM(3,3)
-      DOUBLE PRECISION GeVNb, KM(3,3)
+      DOUBLE PRECISION KM(3,3)
 C
 C      Data Pi/3.14159265/
 C
 C     Conversion from GeV^-2 to nbarn
-      Data GeVNb/0.38937966E9/
+c      DOUBLE PRECISION GeVNb
+c      Data GeVNb/0.389379338d9/
 C
 C     Mass of the W:
 C      Data Wmass/80.41/
@@ -1433,7 +1435,7 @@ C     --- Program variables
 C
       Integer I1, I2, Iup, Idn, Iu1, Iu2
       DOUBLE PRECISION  SumUK, SumDK, SumU1, SumD1,
-     +        MQ2, Hratio, y, T1, Alpha, Tu
+     +        MQ2, Hratio, y, T1, Alpha_cc, Tu
 C
       DOUBLE PRECISION g3,CIfacSR,CIfacSI,CIfacX,CIfacU,CIfacD
       DOUBLE PRECISION U,Shat,LQefwid,Wcorr
@@ -1463,9 +1465,9 @@ C LW: set additional parameters
 CCCCC
 
 C LW: undefined (temporaly) LQ parameters
-C      LQmass = 0
-C      LQwidth = 0
-C      LQres = 0
+      CILQmass = 0.0
+      CILQwidth = 0.0
+      CILQres = 0.0
       
 CCCCC
 
@@ -1501,10 +1503,12 @@ C
 C
 C     --- Calculate common factors
 C
-      Alpha = 1.0/128.0 
+C      Alpha_cc = 1.0/128.0 
+c      Alpha_cc = 1.0/137.0
+      Alpha_cc = Alpha
 C
-      MQ2 = sin2thw*(Mw*Mw + Q2)
-      Hratio = MQ2/(2*pi*Alpha)
+      MQ2 = sin2thw*(Wmass*Wmass + Q2)
+      Hratio = MQ2/(2*pi*Alpha_cc)
 C
 C LQ coupling
 C ===========
@@ -1627,7 +1631,8 @@ C
 C     --- Build left (right) handed electron (positron) cross-sections
 C
       y = Q2/(S*X)
-      T1 = GeVNb*(pi*Alpha*Alpha)/(4.0*X*MQ2*MQ2)
+c      T1 = convfac*(pi*Alpha_cc*Alpha_cc)/(4.0*X*MQ2*MQ2)
+      T1 = (Wmass**4/(Wmass**2+Q2)**2)*Gf**2/(2*pi*X)*convfac 
       Tu = (1.0-y)
 C
       DisCross = T1*(SumUK + Tu*Tu*SumDK)
