@@ -1917,6 +1917,7 @@ C<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
       subroutine read_ContactInteractions
       implicit none
       include 'steering.inc'
+      include 'CI_models.inc'
 
       external :: eprc_init
 C---------------------------------------------
