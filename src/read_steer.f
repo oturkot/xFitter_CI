@@ -1952,6 +1952,11 @@ C  Read the CI namelist:
         idxCIval = 0
         CIvarmin = 0. 
         CIvarmax = 0.
+
+        CILQmass = 0
+        CILQres = 0
+        CILQwidth = 0
+
         if (CItype.eq.'FormFactor') then
           CIindex = 401
           CIname = 'CI_Rq'
