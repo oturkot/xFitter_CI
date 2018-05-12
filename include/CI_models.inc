@@ -9,3 +9,4 @@ C------------------------------------VARIABLES
 
 C------------------------------------COUPLINGS
       DOUBLE PRECISION CILQmass, CILQres, CILQwidth
+      COMMON / CILQ / CILQmass, CILQres, CILQwidth

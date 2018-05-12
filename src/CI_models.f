@@ -1195,7 +1195,7 @@ C
       SUBROUTINE DContNC( X, Q2, S, Eta, Electron, Polar, Zmass,
      +      Alpha, XQfract, DisCross, ConCross, Status )
       IMPLICIT NONE
-      DOUBLE PRECISION X, Q2, S, XQfract(2,6), Polar, Zmass, Alpha
+      DOUBLE PRECISION X, Q2, S, XQfract(2,7), Polar, Zmass, Alpha
       DOUBLE PRECISION DisCross, ConCross
 C      Real*8 Eta(4,6)
       Integer Status
