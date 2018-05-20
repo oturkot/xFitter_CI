@@ -1506,7 +1506,7 @@ C~~~ on 9/05/2018 meeting was agreed to use definition with Gf
 C      Alpha_cc = 1.0/128.0 
 c      Alpha_cc = 1.0/137.0
 c      Alpha_cc = Alpha
-      Alpha_cc = Wmass*Wmass*SQRT(2)*sin2thw/pi
+      Alpha_cc = Wmass*Wmass*SQRT(2D0)*Gf*sin2thw/pi
       MQ2 = sin2thw*(Wmass*Wmass + Q2)
       Hratio = MQ2/(2*pi*Alpha_cc)
 C
