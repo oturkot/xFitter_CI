@@ -618,13 +618,26 @@ CCC
 CCC         Endif
 CCC------------HERE WE FORM ETA FROM PAR
 
-      Eta = reshape([
-     $ par(1), par(2), par(3), par(4), par(5), par(6), par(7), par(8),     
-     $ par(1), par(2), par(3), par(4), par(5), par(6), par(7), par(8),
-     $ par(1), par(2), par(3), par(4), par(5), par(6), par(7), par(8)  
-     $], [4,6])
-c      write (190,*) 'CIvarval (in ModImpose)=',CIvarval
-        
+      IF (CIINDEX .GT. 300) THEN
+C
+C        First generation lpetoquarks
+C
+         ETA = RESHAPE([
+     $   PAR(1), PAR(2), PAR(3), PAR(4), PAR(5), PAR(6), PAR(7), PAR(8),
+     $   0D0, 0D0, 0D0, 0D0, 0D0, 0D0, 0D0, 0D0,
+     $   0D0, 0D0, 0D0, 0D0, 0D0, 0D0, 0D0, 0D0],
+     $   [4,6])
+C
+      ELSE
+C
+C        General CI
+C
+         Eta = reshape([
+     $   par(1), par(2), par(3), par(4), par(5), par(6), par(7), par(8),
+     $   par(1), par(2), par(3), par(4), par(5), par(6), par(7), par(8),
+     $   par(1), par(2), par(3), par(4), par(5), par(6), par(7), par(8)
+      END IF
+
       Return
       End
 C
