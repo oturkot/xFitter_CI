@@ -382,7 +382,7 @@ C-------------------------------------------------------------
 #include "steering.inc"
       integer ifcn3
 
-      integer i
+      integer i, i_ci
       double precision val,err,xlo,xhi
       integer ipar
       character*32 parname
@@ -445,12 +445,14 @@ C     !> begin CI models output
         write (fname,'( a,''/CIout.txt'')') TRIM(OutDirName)
         open (101,file=fname,status='unknown')
         
-        call mnpout(idxCIval,parname,val,err,xlo,xhi,ipar)
-        if (xlo.eq.0.and.xhi.eq.0) then
-          write (101,102) idxCIval, Trim(parname), val,err
-        else
-          write (101,102) idxCIval, Trim(parname), val,err,xlo,xhi
-        endif
+        do i_ci = 1, CInumber
+            call mnpout(idxCIval(i_ci),parname,val,err,xlo,xhi,ipar)
+            if (xlo.eq.0.and.xhi.eq.0) then
+            write (101,102) idxCIval(i_ci), Trim(parname), val,err
+            else
+            write (101,102) idxCIval(i_ci), Trim(parname), val,err,xlo,xhi
+            endif
+        enddo
 
         close(101)
       endif

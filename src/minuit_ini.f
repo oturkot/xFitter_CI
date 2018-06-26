@@ -262,26 +262,28 @@ C   LW: 1.07 CI theory fitting
       
       print*,'CIstudy: Prepare to add minuit par. doCI = ',doCI
       if (doCI) then
-        if ((CIindex.GE.101).AND.(CIindex.LE.401)) then
 
+      do i = 1, CInumber
+        if ((CIindex(i).GE.101).AND.(CIindex(i).LE.401)) then
           print*,'CIstudy: Adding minuit par.'
-          call mnparm(100+nExtraParam+1,CIname
-     $        ,CIvarval
-     $        ,CIvarstep
-     $        ,CIvarmin
-     $        ,CIvarmax
+          call mnparm(100+nExtraParam+i,CIname(i)
+     $        ,CIvarval(i)
+     $        ,CIvarstep(i)
+     $        ,CIvarmin(i)
+     $        ,CIvarmax(i)
      $        ,ierrf)
           if (ierrf.ne.0) then
             print *,'Error adding CI parameter to minuit'
             print *,'Error code=',ierrf
             call HF_errlog(12020505,'F: Error in ExtraParam')
           else
-            idxCIval = 100+nExtraParam+1
+            idxCIval(i) = 100+nExtraParam+i
           endif
         else
           print*, "Error in CI block: Unknown model-index."
           call hf_stop
         endif
+      end do
       endif
       end
       

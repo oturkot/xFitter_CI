@@ -1375,7 +1375,7 @@ c switch on the log poisson correction if ExtraSysRescale was called
 C
 !> @brief Read ExtraMinimisationParameters namelists.
 !> @details Read as many instances of the namelist as exist.
-C-------------------------------------
+C--------------------------------------
       Subroutine ReadExtraParam
 
       implicit none
@@ -1923,7 +1923,7 @@ C<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
 C---------------------------------------------
 C
 C CI namelist
-      namelist/CIstudy/ doCI, CItype, CIvarval, CIvarstep,
+      namelist/CIstudy/ doCI, CInumber, CItype, CIvarval, CIvarstep,
      &                  CIrunning_alphaem, CIDoSimpFit, CISimpFitStep,
      &                  CIalphaemrun_func
 C  Read the CI namelist:
@@ -1932,6 +1932,7 @@ C  Read the CI namelist:
  
  131  continue
       close (51)
+
 
       if (CIrunning_alphaem .and. CIalphaemrun_func.eq.'aemrun' .and. ewfit.le.0)
      >   call eprc_init(.true.)
@@ -1949,173 +1950,178 @@ C  Read the CI namelist:
 
 
       if (doCI) then
-        CIindex = 0
-        idxCIval = 0
-        CIvarmin = 0. 
-        CIvarmax = 0.
-
         CILQmass = 0
         CILQres = 0
         CILQwidth = 0
 
-        if (CItype.eq.'FormFactor') then
-          CIindex = 401
-          CIname = 'CI_Rq'
-C==========================OTHER MODELS
-        elseif (CItype.eq.'VV') then
-          CIindex = 101
-          CIname = '\eta'
-       
-        elseif (CItype.eq.'AA') then
-          CIindex = 102
-          CIname = '\eta'
+        do i_ci = 1, CInumber
+
+        CIindex(i_ci) = 0
+        idxCIval(i_ci) = 0
+        CIvarmin(i_ci) = 0. 
+        CIvarmax(i_ci) = 0.
+
+        CIname(i_ci) = CItype(i_ci)
+
+        select case(CItype(i_ci))
+
+            CASE ('FormFactor')
+            CIindex(i_ci) = 401
+
+            CASE ('VV')
+            CIindex(i_ci) = 101
+            
+            
+            CASE ('AA')
+            CIindex(i_ci) = 102
+            
+            
+            CASE ('VA')
+            CIindex(i_ci) = 103
+            
+
+            CASE ('X1') 
+            CIindex(i_ci) = 104
+            
       
-        elseif (CItype.eq.'VA') then
-          CIindex = 103
-          CIname = '\eta'
+            CASE ('X2') 
+            CIindex(i_ci) = 105
+            
 
-        elseif (CItype.eq.'X1') then
-          CIindex = 104
-          CIname = '\eta'
-    
-        elseif (CItype.eq.'X2') then
-          CIindex = 105
-          CIname = '\eta'
+            CASE ('X3') 
+            CIindex(i_ci) = 106
+            
+      
+            CASE ('X4') 
+            CIindex(i_ci) = 107
+            
+      
+            CASE ('X5') 
+            CIindex(i_ci) = 108
+            
 
-        elseif (CItype.eq.'X3') then
-          CIindex = 106
-          CIname = '\eta'
-  
-        elseif (CItype.eq.'X4') then
-          CIindex = 107
-          CIname = '\eta'
- 
-        elseif (CItype.eq.'X5') then
-          CIindex = 108
-          CIname = '\eta'
+            CASE ('X6') 
+            CIindex(i_ci) = 109
+            
 
-        elseif (CItype.eq.'X6') then
-          CIindex = 109
-          CIname = '\eta'
+            CASE ('U1') 
+            CIindex(i_ci) = 110
+            
 
-        elseif (CItype.eq.'U1') then
-          CIindex = 110
-          CIname = '\eta'
+            CASE ('U2') 
+            CIindex(i_ci) = 111
+            
 
-        elseif (CItype.eq.'U2') then
-          CIindex = 111
-          CIname = '\eta'
+            CASE ('U3') 
+            CIindex(i_ci) = 112
+            
 
-        elseif (CItype.eq.'U3') then
-          CIindex = 112
-          CIname = '\eta'
+            CASE ('U4') 
+            CIindex(i_ci) = 113
+            
 
-        elseif (CItype.eq.'U4') then
-          CIindex = 113
-          CIname = '\eta'
+            CASE ('U5') 
+            CIindex(i_ci) = 114
+            
 
-        elseif (CItype.eq.'U5') then
-          CIindex = 114
-          CIname = '\eta'
+            CASE ('U6') 
+            CIindex(i_ci) = 115
+            
 
-        elseif (CItype.eq.'U6') then
-          CIindex = 115
-          CIname = '\eta'
+            CASE ('LL') 
+            CIindex(i_ci) = 116
+            
 
-        elseif (CItype.eq.'LL') then
-          CIindex = 116
-          CIname = '\eta'
+            CASE ('LR') 
+            CIindex(i_ci) = 117
+            
 
-        elseif (CItype.eq.'LR') then
-          CIindex = 117
-          CIname = '\eta'
+            CASE ('RL') 
+            CIindex(i_ci) = 118
+            
 
-        elseif (CItype.eq.'RL') then
-          CIindex = 118
-          CIname = '\eta'
+            CASE ('RR') 
+            CIindex(i_ci) = 119
+            
 
-        elseif (CItype.eq.'RR') then
-          CIindex = 119
-          CIname = '\eta'
+            CASE ('Extra Dimensions') 
+            CIindex(i_ci) = 201
+            
 
-        elseif (CItype.eq.'Extra Dimensions') then
-          CIindex = 201
-          CIname = '\eta'
+            CASE ('S_o') 
+            CIindex(i_ci) = 301
 
-        elseif (CItype.eq.'S_o') then
-          CIindex = 301
+            CASE ('S_o_L') 
+            CIindex(i_ci) = 302
+            
 
-        elseif (CItype.eq.'S_o_L') then
-          CIindex = 302
-          CIname = '\eta'
+            CASE ('S_o_R') 
+            CIindex(i_ci) = 303
+            
 
-        elseif (CItype.eq.'S_o_R') then
-          CIindex = 303
-          CIname = '\eta'
+            CASE ('~S_o') 
+            CIindex(i_ci) = 304
+            
 
-        elseif (CItype.eq.'~S_o') then
-          CIindex = 304
-          CIname = '\eta'
+            CASE ('S_1/2') 
+            CIindex(i_ci) = 305
+            
 
-        elseif (CItype.eq.'S_1/2') then
-          CIindex = 305
-          CIname = '\eta'
+            CASE ('S_1/2_L') 
+            CIindex(i_ci) = 306
+            
 
-        elseif (CItype.eq.'S_1/2_L') then
-          CIindex = 306
-          CIname = '\eta'
+            CASE ('S_1/2_R') 
+            CIindex(i_ci) = 307
+            
 
-        elseif (CItype.eq.'S_1/2_R') then
-          CIindex = 307
-          CIname = '\eta'
+            CASE ('~S_1/2') 
+            CIindex(i_ci) = 308
+            
 
-        elseif (CItype.eq.'~S_1/2') then
-          CIindex = 308
-          CIname = '\eta'
+            CASE ('S_1') 
+            CIindex(i_ci) = 309
+            
 
-        elseif (CItype.eq.'S_1') then
-          CIindex = 309
-          CIname = '\eta'
+            CASE ('V_o') 
+            CIindex(i_ci) = 311
+            
 
-        elseif (CItype.eq.'V_o') then
-          CIindex = 311
-          CIname = '\eta'
+            CASE ('V_o_L') 
+            CIindex(i_ci) = 312
+            
 
-        elseif (CItype.eq.'V_o_L') then
-          CIindex = 312
-          CIname = '\eta'
+            CASE ('V_o_R') 
+            CIindex(i_ci) = 313
+            
 
-        elseif (CItype.eq.'V_o_R') then
-          CIindex = 313
-          CIname = '\eta'
+            CASE ('~V_o') 
+            CIindex(i_ci) = 314
+            
 
-        elseif (CItype.eq.'~V_o') then
-          CIindex = 314
-          CIname = '\eta'
+            CASE ('V_1/2') 
+            CIindex(i_ci) = 315
+            
 
-        elseif (CItype.eq.'V_1/2') then
-          CIindex = 315
-          CIname = '\eta'
+            CASE ('V_1/2_L') 
+            CIindex(i_ci) = 316
+            
 
-        elseif (CItype.eq.'V_1/2_L') then
-          CIindex = 316
-          CIname = '\eta'
+            CASE ('V_1/2_R') 
+            CIindex(i_ci) = 317
+            
 
-        elseif (CItype.eq.'V_1/2_R') then
-          CIindex = 317
-          CIname = '\eta'
+            CASE ('~V_1/2') 
+            CIindex(i_ci) = 318
+            
 
-        elseif (CItype.eq.'~V_1/2') then
-          CIindex = 318
-          CIname = '\eta'
+            CASE ('V_1') 
+            CIindex(i_ci) = 319
+            
 
-        elseif (CItype.eq.'V_1') then
-          CIindex = 319
-          CIname = '\eta'
-        endif
+        END SELECT
 
-C==========================OTHER MODELS
-        
+        ENDDO        
 
         if (LDebug) then
           print CIstudy

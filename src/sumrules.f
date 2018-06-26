@@ -8,6 +8,7 @@
 #include "steering.inc"
 #include "pdfparam.inc"
 #include "for_debug.inc"
+#include "CI_models.inc"
 
       integer kflag
       double precision t1,t2,t3,t4,term
@@ -204,7 +205,11 @@ cVR      print*,'........................................tphoton', tPho
          print '(''Db:'',11F10.4)',(pardbar(i),i=1,10)
          print '(''GL:'',11F10.4)',(parglue(i),i=1,10)
          !print '(''ST:'',11F10.4)',(parstr(i),i=1,10)
-         print '(''CI:'',E10.2)', CIvarval
+         do i_ci = 1, CInumber
+            print '(''CI:'',A2)', CItype(i_ci)
+            print '(''CI:'',E10.2)', CIvarval(i_ci)
+         enddo
+
          if (iTheory.eq.11.or.iTheory.eq.35) then
             print '(''PH:'',11F10.4)',(parphoton(i),i=1,10)
          endif

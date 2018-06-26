@@ -3,8 +3,8 @@ C-----Namelist for additional CI analyses
 
 C------------------------------------VARIABLES
       DOUBLE PRECISION CIXQfractLO(5000,2,7)
-      DOUBLE PRECISION par(8)
       DOUBLE PRECISION, DIMENSION(4,6) :: Eta
+      integer :: i_ci
 
 
 C------------------------------------COUPLINGS

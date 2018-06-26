@@ -65,7 +65,7 @@ C     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
 *    PDF parameterisation at the starting scale
       call PDF_Param_Iteration(parminuit,iflag)
 
-      if(doCI) CIvarval = parminuit(idxCIval)
+      if(doCI) CIvarval(1) = parminuit(idxCIval(1))
 
 
       do i=1,ntot
@@ -171,8 +171,8 @@ c    external functions and subroutines
       call LOGO(1)
 C     ------------------------------------------------------------------
 
-      RqTrue = parminuit(idxCIval)
-      if (NIOFEX(idxCIval).gt.0) Rqerr = WERR(NIOFEX(idxCIval))
+      RqTrue = parminuit(idxCIval(1))
+      if (NIOFEX(idxCIval(1)).gt.0) Rqerr = WERR(NIOFEX(idxCIval(1)))
       CIvarstep_gt_0 = Rqerr .gt. EPSILON(Rqerr)
 
       call check_CIvarval
@@ -188,7 +188,7 @@ C     ------------------------------------------------------------------
          if(NIOFEX(i_par) .eq. 0) cycle
          if(WERR(NIOFEX(i_par)) .lt. EPSILON(WERR)) cycle
 
-         if(i_par .ne. idxCIval) then
+         if(i_par .ne. idxCIval(1)) then
             needed_pars(nd_prs_end) = i_par
             nd_prs_end = nd_prs_end + 1
          end if
@@ -200,7 +200,7 @@ C     ------------------------------------------------------------------
          Parbuffer = parminuit(i_par)
 
          
-         if(i_par .ne. idxCIval) then
+         if(i_par .ne. idxCIval(1)) then
             parminuit(i_par) = Parbuffer + 0.5D0*WERR(NIOFEX(i_par))
          else
             parminuit(i_par) = Parbuffer + WERR(NIOFEX(i_par))
@@ -209,7 +209,7 @@ C     ------------------------------------------------------------------
          
         THEO_buffer = THEO
 
-         if(i_par .ne. idxCIval) then
+         if(i_par .ne. idxCIval(1)) then
             parminuit(i_par) = Parbuffer - 0.5D0*WERR(NIOFEX(i_par))
          else
             parminuit(i_par) = Parbuffer - WERR(NIOFEX(i_par))
@@ -219,7 +219,7 @@ C     ------------------------------------------------------------------
          do i_dat = 1, ndatasets
             do i = 1, NDATAPOINTS(i_dat)
                idx = DATASETIDX(i_dat, i)
-               if(i_par .ne. idxCIval) then
+               if(i_par .ne. idxCIval(1)) then
                   theta_0(idx, i_par) = (THEO_buffer(idx) - THEO(idx))/
      $                                        WERR(NIOFEX(i_par))
                else if(doCI .and. CIvarstep_gt_0) then
@@ -231,11 +231,11 @@ C     ------------------------------------------------------------------
             end do
          end do
 
-         if(i_par.eq.idxCIval .or. .not.doCI .or. .not.CIvarstep_gt_0)
+         if(i_par.eq.idxCIval(1) .or. .not.doCI .or. .not.CIvarstep_gt_0)
      >      goto 663
 c               . . . . . . . . . . . . . . . . . . . . . . 
 
-         parminuit(idxCIval) = RqTrue + Rqerr
+         parminuit(idxCIval(1)) = RqTrue + Rqerr
          
          parminuit(i_par) = Parbuffer + 0.5D0*WERR(NIOFEX(i_par))
          call calc_theo(g_dummy, parminuit, 4)
@@ -255,7 +255,7 @@ c               . . . . . . . . . . . . . . . . . . . . . .
 
 c               . . . . . . . . . . . . . . . . . . . . . . 
 
-         parminuit(idxCIval) = RqTrue - Rqerr
+         parminuit(idxCIval(1)) = RqTrue - Rqerr
 
          parminuit(i_par) = Parbuffer + 0.5D0*WERR(NIOFEX(i_par))
          call calc_theo(g_dummy, parminuit, 4)
@@ -276,7 +276,7 @@ c               . . . . . . . . . . . . . . . . . . . . . .
  663  continue
   
          parminuit(i_par) = Parbuffer
-         parminuit(idxCIval) = RqTrue
+         parminuit(idxCIval(1)) = RqTrue
       end do
 *     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
 
@@ -371,7 +371,7 @@ c     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
       end if
       
       call PDF_Param_Iteration(parminuit, iflag)
-      if(doCI) CIvarval = parminuit(idxCIval)
+      if(doCI) CIvarval(1) = parminuit(idxCIval(1))
 
 
       kflag=0
@@ -390,16 +390,16 @@ c     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
             do i = 1, NDATAPOINTS(i_dat)
                idx = DATASETIDX(i_dat, i)
 
-               if(i_par .eq. idxCIval) then
+               if(i_par .eq. idxCIval(1)) then
                   THEO(idx) = THEO(idx) +
-     $                        m1(idx)*parminuit(idxCIval) +
-     $                        m2(idx)*parminuit(idxCIval)**2
+     $                        m1(idx)*parminuit(idxCIval(1)) +
+     $                        m2(idx)*parminuit(idxCIval(1))**2
                else
                   THEO(idx) = THEO(idx) + 
      $               (
      $                  theta_0(idx,i_par) +
-     $                  theta_1(idx,i_par)*parminuit(idxCIval) +
-     $                  theta_2(idx,i_par)*parminuit(idxCIval)**2
+     $                  theta_1(idx,i_par)*parminuit(idxCIval(1)) +
+     $                  theta_2(idx,i_par)*parminuit(idxCIval(1))**2
      $               ) * (parminuit(i_par) - p0(i_par))
                end if
             end do
@@ -585,7 +585,7 @@ c    Body
 *     - - - - - -
       ! write used CIvarvalu
       write(103, '(''CIvar '', F10.7, F10.7)')
-     $                    parminuit(idxCIval), WERR(NIOFEX(idxCIval))
+     $                    parminuit(idxCIval(1)), WERR(NIOFEX(idxCIval(1)))
 *     - - - - - -
       ! write names and values of used parameters
       do 6600 i = 1, ndpars_len

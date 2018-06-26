@@ -1,16 +1,18 @@
 Cd
-C=================================================================
+C=================================================================-
 C
-      Subroutine ModImpose(Eta)
+      Subroutine ModImpose(Eta,CIvarval,CIindex)
 C
 C Impose parameter relations in given model
 
 
       Implicit None
-      include 'CI_models.inc'
-      include 'steering.inc'
+c      include 'CI_models.inc'
+c      include 'steering.inc'
+      DOUBLE PRECISION par(8), CIvarval
+      integer CIindex
 C       Real*8 par(8)
-C       REAL, DIMENSION(4,6) :: Eta
+      DOUBLE PRECISION, DIMENSION(4,6) :: Eta
 
 C       Real :: Eta(4,2)
 C
@@ -795,10 +797,10 @@ C LW: additional parameters
 C      Integer Mvar
 
 C LW: set additional parameters
-      If(CIindex.GE.301)Then
+      If(CIindex(i_ci).GE.301)Then
 
-        If(CIindex.LE.304 .OR. CIindex.EQ.309 .OR.
-     +   (CIindex.GE.315 .AND. CIindex.LE.318) )then
+        If(CIindex(i_ci).LE.304 .OR. CIindex(i_ci).EQ.309 .OR.
+     +   (CIindex(i_ci).GE.315 .AND. CIindex(i_ci).LE.318) )then
            LQFN=2
            LQSign=+1
         Else
@@ -806,7 +808,7 @@ C LW: set additional parameters
            LQSign=-1
         EndIf
         
-        IF(CIindex.GE.311)then
+        IF(CIindex(i_ci).GE.311)then
            LQSP=1
         Else
            LQSP=0
@@ -816,40 +818,40 @@ C LW: set additional parameters
         LQsign=0
       EndIf  
 
-C      if(CIindex.LE.106)then
+C      if(CIindex(i_ci).LE.106)then
 C         Mvar=1
-C      elseif(CIindex.LE.108)then
+C      elseif(CIindex(i_ci).LE.108)then
 C         Mvar=2
-C      elseif(CIindex.EQ.109)then
+C      elseif(CIindex(i_ci).EQ.109)then
 C         Mvar=3
-C      elseif(CIindex.LE.112)then
+C      elseif(CIindex(i_ci).LE.112)then
 C         Mvar=5
-C      elseif(CIindex.LE.114)then
+C      elseif(CIindex(i_ci).LE.114)then
 C         Mvar=6
-C      elseif(CIindex.EQ.115)then
+C      elseif(CIindex(i_ci).EQ.115)then
 C         Mvar=7
-C      elseif(CIindex.EQ.201)then
+C      elseif(CIindex(i_ci).EQ.201)then
 C         Mvar=9
 C
 C LQ scenarios
 C
-C      elseif(CIindex.EQ.309 .OR. CIindex.EQ.311 .OR. 
-C      If(CIindex.EQ.309 .OR. CIindex.EQ.311 .OR. 
-C     +       CIindex.EQ.312 .OR. CIindex.EQ.319 )then
+C      elseif(CIindex(i_ci).EQ.309 .OR. CIindex(i_ci).EQ.311 .OR. 
+C      If(CIindex(i_ci).EQ.309 .OR. CIindex(i_ci).EQ.311 .OR. 
+C     +       CIindex(i_ci).EQ.312 .OR. CIindex(i_ci).EQ.319 )then
 C         Mvar=1
-C      elseif(CIindex.EQ.308 .OR. CIindex.EQ.315 .OR.
-C     +       CIindex.EQ.316 )then
+C      elseif(CIindex(i_ci).EQ.308 .OR. CIindex(i_ci).EQ.315 .OR.
+C     +       CIindex(i_ci).EQ.316 )then
 C         Mvar=2
-C      elseif(CIindex.EQ.305 .OR. CIindex.EQ.307 .OR. 
-C     +       CIindex.EQ.317 )then
+C      elseif(CIindex(i_ci).EQ.305 .OR. CIindex(i_ci).EQ.307 .OR. 
+C     +       CIindex(i_ci).EQ.317 )then
 C         Mvar=3
-C      elseif(CIindex.EQ.304 .OR. CIindex.EQ.313 )then
+C      elseif(CIindex(i_ci).EQ.304 .OR. CIindex(i_ci).EQ.313 )then
 C         Mvar=4
-C      elseif(CIindex.EQ.301 .OR. CIindex.EQ.302 )then
+C      elseif(CIindex(i_ci).EQ.301 .OR. CIindex(i_ci).EQ.302 )then
 C         Mvar=5
-C      elseif(CIindex.EQ.306 .OR. CIindex.EQ.318 )then
+C      elseif(CIindex(i_ci).EQ.306 .OR. CIindex(i_ci).EQ.318 )then
 C         Mvar=6
-C      elseif(CIindex.EQ.303 .OR. CIindex.EQ.314 )then
+C      elseif(CIindex(i_ci).EQ.303 .OR. CIindex(i_ci).EQ.314 )then
 C         Mvar=8
 C      EndIf
       
@@ -937,9 +939,9 @@ C
 
       LQEX=0.0
 
-      If(CIindex.GE.301 .AND. CILQmass.GT.0.0  .AND.
+      If(CIindex(i_ci).GE.301 .AND. CILQmass.GT.0.0  .AND.
 CCC     +   (LQwidth.GT.0. .OR. Eta(Mvar,1).NE.0.) )Then
-     +   (CILQwidth.GT.0. .OR. CIvarval.NE.0.) )Then
+     +   (CILQwidth.GT.0. .OR. CIvarval(i_ci).NE.0.) )Then
 C
 C Calculate LQwidth if not available
 C
@@ -948,7 +950,7 @@ C
 C general formula for vector LQ
 C
 CCC            LQefwid(1)=LQsign*Eta(Mvar,1)*LQmass**3/(24.0*Pi)
-            LQefwid(1)=LQsign*CIvarval*CILQmass**3/(24.0*pi)
+            LQefwid(1)=LQsign*CIvarval(i_ci)*CILQmass**3/(24.0*pi)
 C
 C for scalar LQ: factor 3/2 from spin * factor 2 from eta-coupling
 C relation
@@ -1083,7 +1085,7 @@ C
 C Kinemaitc corrections for model 16 (Extra dimentions)
 C
 
-       If(CIindex.EQ.201)Then
+       If(CIindex(i_ci).EQ.201)Then
           GrCorr(1)= -3.1415926/2. * (4.*u+t)/1000000.
           GrCorr(2)= -3.1415926/2. * (4.*u+3.*t)/1000000.
           GrCorr(3)=GrCorr(2)
@@ -1302,7 +1304,7 @@ C Special addition for Large Extra Dimentions (Model=16)
 C                 - scattering on gluons !
 C It is assumed that all Eta(i) are equal for this model ( = 1/M_s^4)
 C
-      If(CIindex.eq.201 .and. XQfract(1,7).GT.0)then
+      If(CIindex(i_ci).eq.201 .and. XQfract(1,7).GT.0)then
          EDgg= -U*(U*U+SS*SS)/SS
          EDgg= 2*pi*pi* Eta(1,1)*Eta(1,1)/1.0D+12 * EDgg * XQfract(1,7)
          ConCross = ConCross + EDgg
@@ -1449,9 +1451,9 @@ CCC      include 'cimodel.inc'
       
 C
 C LW: set additional parameters
-      If(CIindex.GE.301)Then
-        If(CIindex.LE.304 .OR. CIindex.EQ.309 .OR.
-     +   (CIindex.GE.315 .AND. CIindex.LE.318) )then
+      If(CIindex(i_ci).GE.301)Then
+        If(CIindex(i_ci).LE.304 .OR. CIindex(i_ci).EQ.309 .OR.
+     +   (CIindex(i_ci).GE.315 .AND. CIindex(i_ci).LE.318) )then
            LQFN=2
         Else
            LQFN=0
@@ -1518,7 +1520,7 @@ C
       Shat=X*S
       U = -Shat + Q2
 
-      If(CIindex.GE.301 .AND. CILQmass.GT.0.0 .AND. Eta3(1).NE.0.0 )Then
+      If(CIindex(i_ci).GE.301 .AND. CILQmass.GT.0.0 .AND. Eta3(1).NE.0.0 )Then
 
          If(CILQwidth.LE.0.0)then
             status=-2
@@ -1597,7 +1599,7 @@ C
             CIfacU = 1.0
             CIfacD = 1.0
 
-          ELSEIF(CIindex.LT.301 .OR. CILQmass.LE.0.0)Then
+          ELSEIF(CIindex(i_ci).LT.301 .OR. CILQmass.LE.0.0)Then
             CIfacU = (1.0-Hratio*Eta3(I1)/KM(I1,I2))**2
             CIfacD = CIfacU
 

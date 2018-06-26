@@ -25,7 +25,7 @@ C---------------------------------------------------------
 #include "for_debug.inc"
 #include "steering.inc"
 
-      integer i
+      integer i, i_ci
 
 C function:
       double precision chi2data_theory
@@ -98,10 +98,13 @@ C Print MINUIT extra parameters
 ! ---]
 
       if(doCI) then
-        CIvarval = parminuit(idxCIval)
-        print *,'CI minuit readout test, CIvarval = ',CIvarval
+      do i_ci = 1, CInumber
+        CIvarval(i_ci) = parminuit(idxCIval(i_ci))
+        print *,'CI minuit readout test, CIname = ',CIname(i_ci)
+        print *,'CI minuit readout test, CIvarval = ',CIvarval(i_ci)
 C        print *,'in minuit CI index = ',idxCIval
 C        print *,'in minuit CI parameter = ',parminuit(idxCIval)
+      enddo
       endif
 *
 * Evaluate the chi2:

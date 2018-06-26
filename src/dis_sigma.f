@@ -397,6 +397,7 @@ C-------CI_models variables
       integer                        :: iq 
       double precision               :: SS
       double precision               :: ContAlph ! function
+C      integer                        :: i_ci
 
 C---------------------------------------------------------
       if(debug) then
@@ -460,12 +461,6 @@ C
       call CalcReducedXsectionForXYQ2(X,Y,Q2,NDATAPOINTS(IDataSet),
      $     charge,polarity,IDataSet,XSecType, local_hfscheme,XSec)
 
-      call ModImpose(eta)
-      eta3 = reshape([eta(1,1)-eta(1,2),
-     $                eta(1,3)-eta(1,4),
-     $                eta(1,5)-eta(1,6)],
-     $                [3])
-
       do i=1,NDATAPOINTS(IDataSet)
          idx =  DATASETIDX(IDataSet,i)
 
@@ -508,11 +503,22 @@ C
          THEO(idx) =  XSec(i)*factor
          
 C   LW: 30.06 CI theory calculation
-         if(doCI) then
-            if (XSecType.eq.'NCDIS'.or.XSecType.eq.'CCDIS') then
-C                print*,'CIstudy: Past doCI check. CIindex = ',CIindex
 
-               if((CIindex.GT.100).AND.(CIindex.LT.320)) then
+         if(doCI) then
+         do i_ci = 1, CInumber
+
+            call ModImpose(eta,CIvarval(i_ci),CIindex(i_ci))
+
+            eta3 = reshape([eta(1,1)-eta(1,2),
+     $                eta(1,3)-eta(1,4),
+     $                eta(1,5)-eta(1,6)],
+     $                [3])
+
+
+            if (XSecType.eq.'NCDIS'.or.XSecType.eq.'CCDIS') then
+C                print*,'CIstudy: Past doCI check. CIindex = ',CIindex(i_ci)
+
+               if((CIindex(i_ci).GT.100).AND.(CIindex(i_ci).LT.320)) then
                   if (charge.LT.0.0) then
                      Electron = .TRUE.
                   else 
@@ -526,7 +532,7 @@ C                print*,'CIstudy: Past doCI check. CIindex = ',CIindex
                      XQfract(1,iq) = dbPdf(iq)
                      XQfract(2,iq) = dbPdf(-iq)
                   EndDo
-c diff.dis=0 important for CCDIS                
+         
                   xsec_LO_SM_CI=0.0
                   xsec_LO_SM=0.0
             
@@ -546,11 +552,15 @@ c diff.dis=0 important for CCDIS
                      THEO(idx) = THEO(idx)*(xsec_LO_SM_CI/xsec_LO_SM)
                   endif
 
-               elseif (CIindex.eq.401) then
-                  THEO(idx) = THEO(idx)*(( 1 - (CIvarval)*Q2(i)/6 )**2 )
+               elseif (CIindex(i_ci).eq.401) then
+                  THEO(idx) = THEO(idx)*(( 1 - (CIvarval(i_ci))*Q2(i)/6 )**2 )
                endif
+
             endif
+         end do
          endif
+      
+
 C   LW: end of CI theory
 
 ! [--- KK 2015-08-30, WS 2015-10-10
