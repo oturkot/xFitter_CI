@@ -1,0 +1,12 @@
+Executable = /nfs/dust/cms/user/turkot/CIstudy02/xFitter/xFitter_CI_180604/LWork/LQdev/n04_fitLQ+PDF/fit_VoR/condor/condor-run-xfit-LQ_VoR.sh
+log = condor/xfit-LQ_VoR.log
+output = condor/xfit-LQ_VoR.txt
+error = condor/xfit-LQ_VoR.err
+Universe = vanilla
+notification = Error
+Initialdir = /nfs/dust/cms/user/turkot/CIstudy02/xFitter/xFitter_CI_180604/LWork/LQdev/n04_fitLQ+PDF/fit_VoR
+getenv=True
++RequestRuntime = 3600
+RequestMemory = 1999
+Requirements = (OpSysAndVer == "SL6")
+queue 1
