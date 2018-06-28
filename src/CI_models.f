@@ -618,13 +618,26 @@ CCC
 CCC         Endif
 CCC------------HERE WE FORM ETA FROM PAR
 
-      Eta = reshape([
-     $ par(1), par(2), par(3), par(4), par(5), par(6), par(7), par(8),     
-     $ par(1), par(2), par(3), par(4), par(5), par(6), par(7), par(8),
-     $ par(1), par(2), par(3), par(4), par(5), par(6), par(7), par(8)  
-     $], [4,6])
-c      write (190,*) 'CIvarval (in ModImpose)=',CIvarval
-        
+      IF (CIINDEX .GT. 300) THEN
+C        First generation lpetoquarks
+
+        Eta = reshape([
+     $   par(1), par(2), par(3), par(4), par(5), par(6), par(7), par(8),     
+     $   0D0, 0D0, 0D0, 0D0, 0D0, 0D0, 0D0, 0D0,
+     $   0D0, 0D0, 0D0, 0D0, 0D0, 0D0, 0D0, 0D0  
+     $   ], [4,6])
+
+      ELSE
+C        General CI
+
+        Eta = reshape([
+     $   par(1), par(2), par(3), par(4), par(5), par(6), par(7), par(8),     
+     $   par(1), par(2), par(3), par(4), par(5), par(6), par(7), par(8),
+     $   par(1), par(2), par(3), par(4), par(5), par(6), par(7), par(8)  
+     $   ], [4,6])
+
+      ENDIF
+            
       Return
       End
 C
@@ -795,26 +808,26 @@ C LW: additional parameters
 C      Integer Mvar
 
 C LW: set additional parameters
-      If(CIindex.GE.301)Then
-
-        If(CIindex.LE.304 .OR. CIindex.EQ.309 .OR.
-     +   (CIindex.GE.315 .AND. CIindex.LE.318) )then
-           LQFN=2
-           LQSign=+1
-        Else
-           LQFN=0
-           LQSign=-1
-        EndIf
-        
-        IF(CIindex.GE.311)then
-           LQSP=1
-        Else
-           LQSP=0
-        EndIf
-      
-      Else
+CC      If(CIindex.GE.301)Then
+CC
+CC        If(CIindex.LE.304 .OR. CIindex.EQ.309 .OR.
+CC     +   (CIindex.GE.315 .AND. CIindex.LE.318) )then
+CC           LQFN=2
+CC           LQSign=+1
+CC        Else
+CC           LQFN=0
+CC           LQSign=-1
+CC        EndIf
+CC        
+CC        IF(CIindex.GE.311)then
+CC           LQSP=1
+CC        Else
+CC           LQSP=0
+CC        EndIf
+CC      
+CC      Else
         LQsign=0
-      EndIf  
+CC      EndIf  
 
 C      if(CIindex.LE.106)then
 C         Mvar=1
@@ -937,72 +950,72 @@ C
 
       LQEX=0.0
 
-      If(CIindex.GE.301 .AND. CILQmass.GT.0.0  .AND.
+CC      If(CIindex.GE.301 .AND. CILQmass.GT.0.0  .AND.
 CCC     +   (LQwidth.GT.0. .OR. Eta(Mvar,1).NE.0.) )Then
-     +   (CILQwidth.GT.0. .OR. CIvarval.NE.0.) )Then
+CC     +   (CILQwidth.GT.0. .OR. CIvarval.NE.0.) )Then
 C
 C Calculate LQwidth if not available
 C
-         If(CILQwidth.LE.0.)then
+CC         If(CILQwidth.LE.0.)then
 C
 C general formula for vector LQ
 C
 CCC            LQefwid(1)=LQsign*Eta(Mvar,1)*LQmass**3/(24.0*Pi)
-            LQefwid(1)=LQsign*CIvarval*CILQmass**3/(24.0*pi)
+CC            LQefwid(1)=LQsign*CIvarval*CILQmass**3/(24.0*pi)
 C
 C for scalar LQ: factor 3/2 from spin * factor 2 from eta-coupling
 C relation
 C
-            If(LQSP.EQ.0)LQefwid(1)=LQefwid(1)*3.0
+CC            If(LQSP.EQ.0)LQefwid(1)=LQefwid(1)*3.0
 C
 C Correct for BR (CC decay channel: models 39 and 49)
 C         
-            IF(Eta(1,1).NE.Eta(1,2))LQefwid(1)=LQefwid(1)*2.0
+CC            IF(Eta(1,1).NE.Eta(1,2))LQefwid(1)=LQefwid(1)*2.0
 C
 C Store -width for debug purposes :-)
 C
-            CILQwidth=-LQefwid(1)
+CC            CILQwidth=-LQefwid(1)
 C
-            Do iq=2,6
-              Lqefwid(iq)=Lqefwid(1)
-              EndDo
+CC            Do iq=2,6
+CC              Lqefwid(iq)=Lqefwid(1)
+CC              EndDo
 C
 C Take into account QCD correction
 C
 C LW TMP, missing func:
-             Call KQCD(DBLE(-1.),Ucor,Dcor)
+CC             Call KQCD(DBLE(-1.),Ucor,Dcor)
 C
 C             Dcor = 1
 C             Ucor = 1
 C
-             Lqefwid(1)=Lqefwid(1)/Dcor
-             Lqefwid(2)=Lqefwid(2)/Ucor
+CC             Lqefwid(1)=Lqefwid(1)/Dcor
+CC             Lqefwid(2)=Lqefwid(2)/Ucor
 C
-         Else
-            Do iq=1,6
-              LQefwid(iq)=CILQwidth
-            EndDo
-         EndIf
+CC         Else
+CC            Do iq=1,6
+CC              LQefwid(iq)=CILQwidth
+CC            EndDo
+CC         EndIf
 C
 C Avoid to small widths
 C
-         Do iq=1,6
-            If(LQefwid(Iq).LT.CILQres)then
-              Wcorr(iq)=CILQres/LQefwid(Iq)
-              LQefwid(Iq)=CILQres
-            EndIf
-         EndDo
- 
+CC         Do iq=1,6
+CC            If(LQefwid(Iq).LT.CILQres)then
+CC              Wcorr(iq)=CILQres/LQefwid(Iq)
+CC              LQefwid(Iq)=CILQres
+CC            EndIf
+CC         EndDo
+CC 
 C
 C LQ production/exchange channel
 C
-         If(LQFN.EQ.2)Then
-           LQEX=S
-         ELSE
-           LQEX=U
-         EndIf
-        
-      EndIf
+CC         If(LQFN.EQ.2)Then
+CC           LQEX=S
+CC         ELSE
+CC           LQEX=U
+CC         EndIf
+CC        
+CC      EndIf
 C
 C  pure foton coupling
 C
@@ -1018,31 +1031,31 @@ C CI/LQ term
 C ==========
 C CI approximation:
 C
-      If(LQefwid(1).LE.0.0)Then
+CC      If(LQefwid(1).LE.0.0)Then
 
         DO Iq = 1, 6
           g3R(iq) = 1.0
           g3I(Iq) = 0.0
-          EndDo
+        EndDo
 C
 C u-channel exchange
 C
-      ElseIf( LQEX.LE.0.0)Then
-
-        DO Iq = 1, 6
-          g3R(Iq) = (CILQmass*CILQmass)/(CILQmass*CILQmass - LQEX)
-          g3I(Iq) = 0.
-          EndDo
-
+CC      ElseIf( LQEX.LE.0.0)Then
+CC
+CC        DO Iq = 1, 6
+CC          g3R(Iq) = (CILQmass*CILQmass)/(CILQmass*CILQmass - LQEX)
+CC          g3I(Iq) = 0.
+CC        EndDo
+CC
 C
 C s-channel production
 C
-      Else
+CC      Else
 
-        DO Iq = 1, 6
-          g3 = (CILQmass*CILQmass - LQEX)**2 +
-     &    (LQEX*LQefwid(iq)/CILQmass)**2
-          g3R(iq) = (CILQmass*CILQmass - LQEX)*(CILQmass*CILQmass)/g3
+CC        DO Iq = 1, 6
+CC          g3 = (CILQmass*CILQmass - LQEX)**2 +
+CC     &    (LQEX*LQefwid(iq)/CILQmass)**2
+CC          g3R(iq) = (CILQmass*CILQmass - LQEX)*(CILQmass*CILQmass)/g3
 C
 C Corection to interference term
 C
@@ -1051,15 +1064,15 @@ C          g3R(iq) = g3R(Iq)/Wcorr(Iq)
 C
 C ===> No correction! (as found out in tests)
 C
-          If(Wcorr(Iq).le.1.0)then
-            g3I(iq) = (LQEX*LQefwid(iq)*CILQmass)/g3
-          Else
+CC          If(Wcorr(Iq).le.1.0)then
+CC            g3I(iq) = (LQEX*LQefwid(iq)*CILQmass)/g3
+CC          Else
 C
 C No correction to interference term:
 C
-            g3i(iq) = 
-     +        (Wcorr(iq)-1.0)*(CILQmass*CILQmass - LQEX)**2 +
-     +         Wcorr(iq)*(LQEX*LQefwid(iq)/CILQmass)**2
+CC            g3i(iq) = 
+CC     +        (Wcorr(iq)-1.0)*(CILQmass*CILQmass - LQEX)**2 +
+CC     +         Wcorr(iq)*(LQEX*LQefwid(iq)/CILQmass)**2
 C
 C Gamma^(-0.5) correction to interference term
 C
@@ -1073,12 +1086,12 @@ C            g3i(iq) =
 C     +        (Wcorr(iq)-1/Wcorr(iq)**2)*(LQmass*LQmass - LQEX)**2 +
 C     +         Wcorr(iq)*(LQEX*LQefwid(iq)/LQmass)**2
 C
-            g3i(iq)=sqrt(g3i(iq))*CILQmass*CILQmass/g3
-
-            EndIf
-          EndDo
-
-        EndIf
+CC            g3i(iq)=sqrt(g3i(iq))*CILQmass*CILQmass/g3
+CC
+CC          EndIf
+CC        EndDo
+CC
+CC      EndIf
 C
 C Kinemaitc corrections for model 16 (Extra dimentions)
 C
@@ -1302,11 +1315,11 @@ C Special addition for Large Extra Dimentions (Model=16)
 C                 - scattering on gluons !
 C It is assumed that all Eta(i) are equal for this model ( = 1/M_s^4)
 C
-      If(CIindex.eq.201 .and. XQfract(1,7).GT.0)then
-         EDgg= -U*(U*U+SS*SS)/SS
-         EDgg= 2*pi*pi* Eta(1,1)*Eta(1,1)/1.0D+12 * EDgg * XQfract(1,7)
-         ConCross = ConCross + EDgg
-         EndIf
+CC      If(CIindex.eq.201 .and. XQfract(1,7).GT.0)then
+CC         EDgg= -U*(U*U+SS*SS)/SS
+CC         EDgg= 2*pi*pi* Eta(1,1)*Eta(1,1)/1.0D+12 * EDgg * XQfract(1,7)
+CC         ConCross = ConCross + EDgg
+CC         EndIf
 C
       DisCross = convfac/(16.*pi*X)  * DisCross
       ConCross = convfac/(16.*pi*X)  * ConCross 
@@ -1449,14 +1462,14 @@ CCC      include 'cimodel.inc'
       
 C
 C LW: set additional parameters
-      If(CIindex.GE.301)Then
-        If(CIindex.LE.304 .OR. CIindex.EQ.309 .OR.
-     +   (CIindex.GE.315 .AND. CIindex.LE.318) )then
-           LQFN=2
-        Else
-           LQFN=0
-        EndIf
-      EndIf
+CC      If(CIindex.GE.301)Then
+CC        If(CIindex.LE.304 .OR. CIindex.EQ.309 .OR.
+CC     +   (CIindex.GE.315 .AND. CIindex.LE.318) )then
+CC           LQFN=2
+CC        Else
+CC           LQFN=0
+CC        EndIf
+CC      EndIf
 
       KM = reshape((/ Vud, Vus, Vub,
      +                Vcd, Vcs, Vcb,
@@ -1518,47 +1531,47 @@ C
       Shat=X*S
       U = -Shat + Q2
 
-      If(CIindex.GE.301 .AND. CILQmass.GT.0.0 .AND. Eta3(1).NE.0.0 )Then
-
-         If(CILQwidth.LE.0.0)then
-            status=-2
-            return            
-         endif
+CC      If(CIindex.GE.301 .AND. CILQmass.GT.0.0 .AND. Eta3(1).NE.0.0 )Then
+CC
+CC         If(CILQwidth.LE.0.0)then
+CC            status=-2
+CC            return            
+CC         endif
 C
 C Avoid to small widths
 C
-         If(CILQwidth.LT.CILQres)then
-            Wcorr=CILQres/CILQwidth
-            LQefwid=CILQres
-         else
-            Wcorr=1.0
-            LQefwid=CILQwidth
-         EndIf
-
+CC         If(CILQwidth.LT.CILQres)then
+CC            Wcorr=CILQres/CILQwidth
+CC            LQefwid=CILQres
+CC         else
+CC            Wcorr=1.0
+CC            LQefwid=CILQwidth
+CC         EndIf
+CC
 C
 C u-channel exchange
 C
-         CIfacX = (CILQmass*CILQmass)/(CILQmass*CILQmass - U)
+CC         CIfacX = (CILQmass*CILQmass)/(CILQmass*CILQmass - U)
 C
 C s-channel production
 C
-        g3 = (CILQmass*CILQmass - Shat)**2 + (Shat*Lqefwid/CILQmass)**2
-        CIfacSR = (CILQmass*CILQmass - Shat)
-     &  *(CILQmass*CILQmass)/g3/sqrt(Wcorr)
-
-        If(Wcorr.le.1.0)then
-           CIfacSI = (Shat*Lqefwid*CILQmass)/g3
-        Else
-           CIfacSI = (Wcorr-1.0/Wcorr)*(CILQmass*CILQmass - Shat)**2 +
-     +                           Wcorr*(Shat*Lqefwid/CILQmass)**2
-           CIfacSI = (sqrt(CIfacSI)*CILQmass*CILQmass)/g3
+CC        g3 = (CILQmass*CILQmass - Shat)**2 + (Shat*Lqefwid/CILQmass)**2
+CC        CIfacSR = (CILQmass*CILQmass - Shat)
+CC     &  *(CILQmass*CILQmass)/g3/sqrt(Wcorr)
+CC
+CC        If(Wcorr.le.1.0)then
+CC           CIfacSI = (Shat*Lqefwid*CILQmass)/g3
+CC        Else
+CC           CIfacSI = (Wcorr-1.0/Wcorr)*(CILQmass*CILQmass - Shat)**2 +
+CC     +                           Wcorr*(Shat*Lqefwid/CILQmass)**2
+CC           CIfacSI = (sqrt(CIfacSI)*CILQmass*CILQmass)/g3
 C           CIfacSI = sqrt(CIfacSI)
 C           CIfacSI = CIfacSI*CILQmass
 C           CIfacSI = CIfacSI*CILQmass
 C           CIfacSI = CIfacSI/g3
-        EndIf
-
-      EndIf
+CC        EndIf
+CC
+CC      EndIf
 C
 C     --- Build effective quark densities for electrons (positrons):
 C
@@ -1597,20 +1610,21 @@ C
             CIfacU = 1.0
             CIfacD = 1.0
 
-          ELSEIF(CIindex.LT.301 .OR. CILQmass.LE.0.0)Then
+CC          ELSEIF(CIindex.LT.301 .OR. CILQmass.LE.0.0)Then
+          ELSE
             CIfacU = (1.0-Hratio*Eta3(I1)/KM(I1,I2))**2
             CIfacD = CIfacU
-
-          ELSEIF(LQFN.EQ.0)Then
-            CIfacU =  (1.0-Hratio*CifacX*Eta3(I1)/KM(I1,I2))**2
-            CIfacD =  (1.0-Hratio*CifacSR*Eta3(I1)/KM(I1,I2))**2
-     +                  + (Hratio*CifacSI*Eta3(I1)/KM(I1,I2))**2
-
-          ELSE
-            CIfacU =  (1.0-Hratio*CifacSR*Eta3(I1)/KM(I1,I2))**2
-     +                  + (Hratio*CifacSI*Eta3(I1)/KM(I1,I2))**2
-            CIfacD =  (1.0-Hratio*CifacX*Eta3(I1)/KM(I1,I2))**2
-            ENDIF
+CC
+CC          ELSEIF(LQFN.EQ.0)Then
+CC            CIfacU =  (1.0-Hratio*CifacX*Eta3(I1)/KM(I1,I2))**2
+CC            CIfacD =  (1.0-Hratio*CifacSR*Eta3(I1)/KM(I1,I2))**2
+CC     +                  + (Hratio*CifacSI*Eta3(I1)/KM(I1,I2))**2
+CC
+CC          ELSE
+CC            CIfacU =  (1.0-Hratio*CifacSR*Eta3(I1)/KM(I1,I2))**2
+CC     +                  + (Hratio*CifacSI*Eta3(I1)/KM(I1,I2))**2
+CC            CIfacD =  (1.0-Hratio*CifacX*Eta3(I1)/KM(I1,I2))**2
+          ENDIF
 C
 C Sum of (weighted) up-type quark densities
 C

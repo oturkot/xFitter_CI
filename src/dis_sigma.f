@@ -385,6 +385,13 @@ C Functions:
 c H1qcdfunc
       integer ifirst
       data ifirst /1/
+      
+C from Oleg, LW update
+      double precision x_p,y_p,q2_p,XSec_p
+      integer j, N_mg
+      double precision X_mg(NPMaxDIS),Y_mg(NPMaxDIS),Q2_mg(NPMaxDIS),
+     >                 XSec_mg(NPMaxDIS)
+      character*48 file_name
 
 C-------CI_models variables
       DOUBLE PRECISION               :: xsec_LO_SM_CI, xsec_LO_SM
@@ -552,7 +559,7 @@ c diff.dis=0 important for CCDIS
             endif
          endif
 C   LW: end of CI theory
-
+    
 ! [--- KK 2015-08-30, WS 2015-10-10
 C         print*,'Twist study: Prepare to implemented. doHiTwist = ', doHiTwist
          if(doHiTwist) then
@@ -567,6 +574,163 @@ C         print*,'Twist study: Prepare to implemented. doHiTwist = ', doHiTwist
 ! ---]
 
       enddo
+      
+C   LW: 15.06.18 prepare Mandy-type output (from Oleg)
+      IF (doPrintMG) THEN
+        
+C   LW: get some value of S
+        idxS =  GetInfoIndex(IDataSet,'sqrt(S)')
+        if (idxS .gt. 0) then
+            S = (DATASETInfo( GetInfoIndex(IDataSet,'sqrt(S)')
+     $           , IDataSet))**2
+        else
+            idx =  DATASETIDX(IDataSet,1)
+            X(1)   = AbstractBins(idxX,idx)
+            Q2(1)  = AbstractBins(idxQ2,idx)
+            Y(1)   = AbstractBins(idxY,idx)
+            S = Q2(1) / ( X(1) * Y(1) )
+        endif
+
+C   LW: prepare the Mandy's grid
+        N_mg = 0
+        DO I=0,160
+            IF(I.LE.72)THEN
+                Q2_p=10**(5D0/120D0*I)
+            ELSE
+                Q2_p=10**(2D0/88D0*(I-72)+3D0)
+            ENDIF
+            DO J=0,160
+                IF(J.LE.80)THEN
+                    X_p=10**(5D0/133D0*J-5D0)
+                ELSE
+                    X_p=10**(2D0/80D0*(J-80)-201D-2)
+                ENDIF
+                    Y_p = Q2_p/(S * X_p);
+                    
+                N_mg = N_mg + 1
+                Q2_mg(N_mg) = Q2_p
+                X_mg(N_mg)  = X_p
+                Y_mg(N_mg)  = Y_p
+
+C               call CalcReducedXsectionABKMForPoint(x_p,y_p,Q2_p,
+C     $              charge,polarity,XSecType,XSec_p)
+C               print *,'Oleg_XSec_p ',x_p, Q2_p,XSec_p
+            ENDDO
+        ENDDO
+        
+C   LW: repeat the whole procedure:
+        call CalcReducedXsectionForXYQ2(X_mg,Y_mg,Q2_mg,N_mg,
+     $     charge,polarity,IDataSet,XSecType, local_hfscheme,XSec_mg)
+
+        call ModImpose(eta)
+        eta3 = reshape([eta(1,1)-eta(1,2),
+     $                eta(1,3)-eta(1,4),
+     $                eta(1,5)-eta(1,6)],
+     $                [3])
+
+        if (charge.LT.0.0) then
+          file_name = 'output/LWMG_'//XSecType//'_m.dat'
+        else
+          file_name = 'output/LWMG_'//XSecType//'_p.dat'
+        endif
+      
+        open(70, file=file_name)
+      
+        do i=1,N_mg
+
+           ! running alpha_EM
+           if (CIrunning_alphaem) then
+              select case (CIalphaemrun_func)
+                 case ('aemrun')
+                    alphaem = aemrun(Q2_mg(i))
+                 case ('ContAlph')
+                    alphaem = ContAlph(Q2_mg(i))
+                 case default
+                    stop 'unknown running alpha em function'
+              end select
+           end if
+
+           Yplus  = 1. + (1.-Y_mg(i))**2
+
+           factor=1.D0
+           if(.not. IsReduced) then
+              if (XSecType.eq.'CCDIS') then
+                 factor=(Mw**4/(Mw**2+Q2_mg(i))**2)*Gf**2/(2*pi*X_mg(i))*convfac
+              else if (XSecType.eq.'NCDIS'.or.XSecType.eq.'CHARMDIS'.or.
+     $                XSecType.eq.'BEAUTYDIS') then
+                 alphaem_run = alphaem
+                 factor=2*pi*alphaem_run**2*Yplus/(X_mg(i)*Q2_mg(i)**2)*convfac
+              else if (XSecType.eq.'FL') then
+                 factor=1.D0
+              else if (XSecType.eq.'F2') then
+                 factor=1.D0
+              else
+                 print *, 'GetDisXsection, XSecType',XSecType,
+     $              'not supported'
+                 stop
+              endif
+           endif
+
+           if (local_hfscheme==27) factor=1d0
+
+C   LW: 19.06.18 turn off calculation of reduced x-sections for now
+C         XSec_mg(i) = XSec_mg(i)*factor
+         
+C   LW: 30.06.16 CI theory calculation
+           if(doCI) then
+              if (XSecType.eq.'NCDIS'.or.XSecType.eq.'CCDIS') then
+C                  print*,'CIstudy: Past doCI check. CIindex = ',CIindex
+
+                 if((CIindex.GT.100).AND.(CIindex.LT.320)) then
+                    if (charge.LT.0.0) then
+                       Electron = .TRUE.
+                    else 
+                       Electron = .FALSE.
+                    endif
+
+                    SS = Q2_mg(i)/(X_mg(i)*Y_mg(i))
+
+                    Call hf_get_pdfs(X_mg(i),Q2_mg(i),dbPdf)
+                    Do iq=1,6
+                       XQfract(1,iq) = dbPdf(iq)
+                       XQfract(2,iq) = dbPdf(-iq)
+                    EndDo
+c diff.dis=0 important for CCDIS                
+                    xsec_LO_SM_CI=0.0
+                    xsec_LO_SM=0.0
+            
+                    if(XSecType.eq.'NCDIS')then
+                       call DContNC(X_mg(i),Q2_mg(i),SS,Eta,Electron,polarity, 
+     +                    Mz, alphaem, XQfract, xsec_LO_SM, xsec_LO_SM_CI,
+     +                    Status )
+                    endif
+              
+                    if(XSecType.eq.'CCDIS')then
+                       call DContCC(X_mg(i),Q2_mg(i),SS,Eta3,Electron,polarity,
+     +                    Mw, alphaem, XQfract, xsec_LO_SM, xsec_LO_SM_CI,
+     +                    Status ) 
+                    endif
+ 
+                    if((xsec_LO_SM_CI.GT.0.).AND.(xsec_LO_SM.GT.0.))then 
+                       XSec_mg(i) = XSec_mg(i)*(xsec_LO_SM_CI/xsec_LO_SM)
+                    endif
+
+                 elseif (CIindex.eq.401) then
+                    XSec_mg(i) = XSec_mg(i)*(( 1 - (CIvarval)*Q2(i)/6 )**2 )
+                 endif
+              endif
+           endif
+C   LW: end of CI theory
+      
+C   LW: And save results to the file
+C          write (70,*) X_mg(i), Q2_mg(i),XSec_mg(i)
+          write (70,*) XSec_mg(i),XSec_mg(i),XSec_mg(i)
+      
+        enddo
+      
+        close(70)
+      
+      ENDIF
 
       if ((iflagFCN.eq.3).and.(h1QCDFUNC).and.(XSecType.eq.'NCDIS')) then
          if (ifirst.eq.1) then

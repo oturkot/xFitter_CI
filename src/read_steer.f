@@ -1924,7 +1924,7 @@ C
 C CI namelist
       namelist/CIstudy/ doCI, CItype, CIvarval, CIvarstep,
      &                  CIrunning_alphaem, CIDoSimpFit, CISimpFitStep,
-     &                  CIalphaemrun_func
+     &                  CIalphaemrun_func, doPrintMG
 C  Read the CI namelist:
       open (51,file='steering.txt',status='old')
       read (51,NML=CIstudy,ERR=134,end=131)
